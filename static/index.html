@@ -1,0 +1,1214 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>موقفي — Mawqfi SDK</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Noto+Kufi+Arabic:wght@500;700&display=swap">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#EDF0F4; --panel:#FFFFFF; --panel2:#F4F6F9; --ink:#15202D; --ink2:#586577; --line:#D6DCE5;
+  --brand:#0F4FA8; --on-brand:#FFFFFF;
+  --free:#0B7546; --likely:#8F6500; --unsure:#B45A08; --busy:#B72B36; --unk:#6E7A8B;
+  --free-bg:#DDF3E7; --likely-bg:#FBF0CC; --unsure-bg:#FCE6D2; --busy-bg:#FADADD; --unk-bg:#E7EBF0;
+  --m-free:#3ED598; --m-likely:#F4C542; --m-unsure:#F59A3E; --m-busy:#F26571; --m-unk:#8C98AA;
+  --font-d:'Noto Kufi Arabic','IBM Plex Sans Arabic',Tahoma,sans-serif;
+  --font-b:'IBM Plex Sans Arabic','Segoe UI',Tahoma,system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E151F; --panel:#161F2C; --panel2:#1B2636; --ink:#E7ECF3; --ink2:#9AA6B7; --line:#2A3749;
+    --brand:#6AA6FF; --on-brand:#08111F;
+    --free:#4CD79B; --likely:#F1C24B; --unsure:#F3A257; --busy:#F47A85; --unk:#8E9AAB;
+    --free-bg:#123526; --likely-bg:#3A3010; --unsure-bg:#3B2712; --busy-bg:#3D1A1F; --unk-bg:#222D3C;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E151F; --panel:#161F2C; --panel2:#1B2636; --ink:#E7ECF3; --ink2:#9AA6B7; --line:#2A3749;
+  --brand:#6AA6FF; --on-brand:#08111F;
+  --free:#4CD79B; --likely:#F1C24B; --unsure:#F3A257; --busy:#F47A85; --unk:#8E9AAB;
+  --free-bg:#123526; --likely-bg:#3A3010; --unsure-bg:#3B2712; --busy-bg:#3D1A1F; --unk-bg:#222D3C;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font:400 15px/1.65 var(--font-b);-webkit-text-size-adjust:100%}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+.app{max-width:480px;margin:0 auto;padding:0 14px 110px}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:6;background:var(--bg);display:flex;align-items:center;justify-content:space-between;padding:10px 0;gap:10px}
+.brand{display:flex;align-items:center;gap:10px}
+.logo{width:26px;height:32px}
+.wm{font:700 20px/1 var(--font-d)}
+.wm-en{font:600 11px/1.2 var(--font-b);color:var(--ink2);letter-spacing:.06em}
+.seg{display:inline-flex;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:3px;gap:2px}
+.seg button{border:0;background:transparent;padding:7px 14px;border-radius:8px;font-weight:500;font-size:14px;min-height:36px;color:var(--ink2)}
+.seg button.on{background:var(--brand);color:var(--on-brand)}
+.seg.sm button{padding:5px 12px;min-height:32px;font-size:13px}
+.tab{display:none}
+.tab.on{display:block}
+h2{font:700 16px/1.4 var(--font-d);margin:0 0 10px}
+h3{font:700 14px/1.4 var(--font-d);margin:0 0 6px}
+.blk{padding:16px 0;border-top:1px solid var(--line)}
+.blk.first{border-top:0;padding-top:6px}
+.hint{color:var(--ink2);font-size:13.5px;margin:6px 0}
+.status{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--panel);border:1px solid var(--line);border-radius:12px;margin-bottom:10px}
+.status>div{flex:1;min-width:0}
+.status b{display:block;font:700 15px/1.4 var(--font-d)}
+.status small{color:var(--ink2);font-size:12.5px;display:block}
+.status .mode{font-size:12px;color:var(--ink2);border:1px solid var(--line);border-radius:999px;padding:2px 10px;white-space:nowrap}
+.pulse{width:10px;height:10px;border-radius:50%;background:var(--unk);flex:none}
+.pulse.on{background:var(--free);box-shadow:0 0 0 4px color-mix(in srgb,var(--free) 25%,transparent)}
+.mapbox{border-radius:14px;overflow:hidden;background:#101720;border:1px solid var(--line)}
+#map{display:block;width:100%;height:auto;direction:ltr;touch-action:manipulation}
+.m-bg{fill:#101720}.m-road{fill:#263243}.m-lot{fill:#1E2835}
+.m-dash{stroke:#5B6A80;stroke-width:.14;stroke-dasharray:.9 .9}
+.m-zone{fill:none;stroke:#F4C542;stroke-width:.16;stroke-dasharray:.6 .5;opacity:.75}
+.m-zlabel{font-size:.95px;fill:#F4C542;font-family:var(--font-b);opacity:.9}
+.m-spot{stroke:#EEF2F7;stroke-width:.12;cursor:pointer}
+.m-parked{fill:#6B7A90;opacity:.7;pointer-events:none}
+.m-id{font-size:.95px;font-weight:600;fill:#fff;text-anchor:middle;font-family:var(--font-b);pointer-events:none}
+.m-pct{font-size:.8px;font-weight:600;text-anchor:middle;font-family:var(--font-b);pointer-events:none}
+.m-sel{fill:none;stroke:#fff;stroke-width:.28}
+.m-route{fill:none;stroke:#6AA6FF;stroke-width:.3;stroke-dasharray:.8 .6;stroke-linecap:round}
+.m-gps{fill:rgba(106,166,255,.14);stroke:rgba(106,166,255,.65);stroke-width:.1}
+.m-fp{fill:none;stroke:#F4C542;stroke-width:.14}
+.m-fpl{stroke:#F4C542;stroke-width:.08;opacity:.6}
+.m-est{fill:#fff;stroke:#0F4FA8;stroke-width:.12}
+.car-body{fill:#4C8DFF;stroke:#fff;stroke-width:.14}
+.car-glass{fill:#0E1B33}
+.legend{display:flex;flex-wrap:wrap;gap:6px 12px;margin:10px 0;font-size:12.5px;color:var(--ink2)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-inline-end:5px;vertical-align:-1px}
+.chip{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12.5px;font-weight:500;background:var(--unk-bg);color:var(--unk)}
+.chip.free{background:var(--free-bg);color:var(--free)}
+.chip.likely{background:var(--likely-bg);color:var(--likely)}
+.chip.unsure{background:var(--unsure-bg);color:var(--unsure)}
+.chip.busy{background:var(--busy-bg);color:var(--busy)}
+.chip.off{background:transparent;border:1px dashed var(--line);color:var(--ink2)}
+.chip.src{background:var(--panel2);color:var(--ink);border:1px solid var(--line)}
+.btn{min-height:44px;padding:9px 16px;border-radius:10px;border:1px solid var(--line);background:var(--panel);font-weight:500;font-size:14px}
+.btn.pri{background:var(--brand);border-color:var(--brand);color:var(--on-brand)}
+.btn.ok{border-color:var(--free);color:var(--free)}
+.btn.no{border-color:var(--busy);color:var(--busy)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.ctl{margin:12px 0}
+.ctl>label{display:flex;justify-content:space-between;font-size:13.5px;color:var(--ink2);margin-bottom:4px}
+.ctl input[type=range]{width:100%;accent-color:var(--brand)}
+.chk{display:flex;gap:10px;align-items:center;margin:10px 0;font-size:14px;min-height:36px}
+.chk input{width:20px;height:20px;accent-color:var(--brand)}
+input[type=text],input[type=password],select{min-height:44px;padding:8px 12px;border-radius:10px;border:1px solid var(--line);background:var(--panel);width:100%}
+select{width:auto;min-width:110px}
+textarea{width:100%;min-height:110px;border-radius:10px;border:1px solid var(--line);background:var(--panel2);padding:10px;font:12.5px/1.6 ui-monospace,Menlo,Consolas,monospace;direction:ltr}
+.scard{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;margin:10px 0}
+.scard .hd{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.sid{font:700 26px/1.1 var(--font-d)}
+.big{font:700 32px/1 var(--font-d);text-align:end}
+.big small{display:block;font:400 12px/1.4 var(--font-b);color:var(--ink2);margin-top:4px}
+.meta{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:8px 14px;font-size:14px}
+.kv dt{color:var(--ink2)}
+.kv dd{margin:0;font-weight:500;text-align:end}
+.kv dd.mut{color:var(--ink2);font-weight:400}
+.ltr{direction:ltr;unicode-bidi:embed}
+.stp{list-style:none;margin:0;padding:0}
+.stp li{display:grid;grid-template-columns:30px 1fr;gap:12px;position:relative;padding-bottom:14px}
+.stp li:not(:last-child)::before{content:"";position:absolute;inset-inline-start:14px;top:30px;bottom:0;width:2px;background:var(--line)}
+.stp .n{width:30px;height:30px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font:700 13px var(--font-d);background:var(--bg)}
+.stp li.done .n{border-color:var(--free);color:var(--free)}
+.stp li.now .n{background:var(--brand);border-color:var(--brand);color:var(--on-brand)}
+.stp b{display:block;font-weight:600;line-height:1.4}
+.stp small{color:var(--ink2);font-size:12.5px}
+.result{background:var(--panel2);border-radius:10px;padding:10px 12px;font-size:14px}
+.evl{list-style:none;margin:0;padding:0}
+.evl li{display:grid;grid-template-columns:10px 1fr;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}
+.evl li:last-child{border-bottom:0}
+.evl .d{width:10px;height:10px;border-radius:50%;margin-top:8px;background:var(--unk)}
+.evl .d.park{background:var(--busy)}.evl .d.depart{background:var(--free)}.evl .d.stop{background:var(--unsure)}.evl .d.zone_enter{background:var(--brand)}.evl .d.confirm{background:var(--likely)}.evl .d.left_car,.evl .d.returned{background:var(--unk)}
+.evl small{display:block;color:var(--ink2);font-size:12.5px}
+pre{margin:0;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:12px;font:12.5px/1.6 ui-monospace,Menlo,Consolas,monospace;overflow-x:auto;white-space:pre}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{background:var(--panel2);border-radius:10px;padding:10px 12px}
+.stat b{display:block;font:700 22px/1.2 var(--font-d)}
+.stat span{font-size:12.5px;color:var(--ink2)}
+.tbl{width:100%;border-collapse:collapse;font-size:14px}
+.tbl td,.tbl th{padding:9px 4px;border-bottom:1px solid var(--line);vertical-align:middle;text-align:start}
+.tbl th{font-weight:600;color:var(--ink2);font-size:12.5px}
+.tbl tr[data-act]{cursor:pointer}
+.bar{height:8px;background:var(--panel2);border-radius:99px;overflow:hidden;min-width:64px;border:1px solid var(--line)}
+.bar i{display:block;height:100%}
+.feed{list-style:none;margin:0;padding:0;font-size:14px}
+.feed li{padding:8px 0;border-bottom:1px solid var(--line)}
+.feed small{color:var(--ink2);display:block;font-size:12.5px}
+.chk-list{list-style:none;margin:0;padding:0}
+.chk-list li{display:grid;grid-template-columns:1fr auto;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
+.chk-list small{display:block;color:var(--ink2);font-size:12.5px}
+.ptsn{font:700 44px/1 var(--font-d)}
+.lvl{height:10px;border-radius:99px;background:var(--panel2);border:1px solid var(--line);overflow:hidden;margin:10px 0 4px}
+.lvl i{display:block;height:100%;background:var(--brand)}
+.rw{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.rw small{display:block;color:var(--ink2)}
+.code{font:600 13px ui-monospace,Menlo,monospace;direction:ltr;display:inline-block;background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:1px 8px}
+.picks{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:10px 0}
+.pick{min-height:48px;border-radius:10px;border:1px solid var(--line);background:var(--panel);font-weight:600;font-size:13px;line-height:1.3;padding:4px}
+.pick small{display:block;font-weight:400;color:var(--ink2);font-size:11.5px}
+.pick.has{border-color:var(--free)}
+.pick.sel{background:var(--brand);color:var(--on-brand);border-color:var(--brand)}
+.pick.sel small{color:var(--on-brand)}
+.step{display:grid;grid-template-columns:30px 1fr;gap:12px}
+.step>.n{width:30px;height:30px;border-radius:50%;background:var(--brand);color:var(--on-brand);display:grid;place-items:center;font:700 13px var(--font-d)}
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:var(--panel);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);padding-bottom:env(safe-area-inset-bottom,0px);z-index:8}
+.nav button{border:0;background:transparent;padding:8px 2px 9px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11.5px;color:var(--ink2);min-height:58px}
+.nav button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.nav button.on{color:var(--brand);font-weight:600}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(70px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:14px;max-width:min(440px,92vw);text-align:center;z-index:20;opacity:0;pointer-events:none;transition:opacity .2s}
+#toast.on{opacity:1}
+.modal{position:fixed;inset:0;background:rgba(8,14,22,.6);z-index:30;display:flex;align-items:flex-end;justify-content:center}
+.modal .sheet{background:var(--panel);width:100%;max-width:480px;border-radius:18px 18px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom,0px))}
+.modal ul{padding-inline-start:20px;margin:8px 0 14px}
+.modal li{margin:4px 0}
+details{margin-top:10px}
+summary{cursor:pointer;color:var(--ink2);font-size:13.5px;min-height:32px}
+@media (prefers-reduced-motion:reduce){#toast{transition:none}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 40 48" aria-hidden="true"><path d="M20 2C10.6 2 3 9.4 3 18.6 3 31 20 46 20 46s17-15 17-27.4C37 9.4 29.4 2 20 2z" fill="var(--brand)"/><circle cx="20" cy="18.5" r="7" fill="var(--panel)"/></svg>
+      <div><div class="wm">موقفي</div><div class="wm-en" dir="ltr">Mawqfi SDK</div></div>
+    </div>
+    <div class="seg" id="modeSeg"><button data-act="mode" data-v="real">حقيقي</button><button data-act="mode" data-v="sim">محاكاة</button></div>
+  </header>
+
+  <section class="tab on" id="tab-map">
+    <div id="status" class="status"></div>
+    <div class="mapbox"><svg id="map" viewBox="-13 -12 26 34" preserveAspectRatio="xMidYMid meet" role="img" aria-label="خريطة الموقف"></svg></div>
+    <div id="legend" class="legend"></div>
+    <div id="prompt"></div>
+    <div id="spotCard"></div>
+    <div id="ctrl" class="blk"></div>
+  </section>
+
+  <section class="tab" id="tab-lab">
+    <div class="blk first"><h2>الاتصال</h2><div id="labConn"></div></div>
+    <div class="blk"><div class="step"><span class="n">1</span><div><h2>مخطط الموقف والمرجع</h2><div id="cfg"></div></div></div></div>
+    <div class="blk"><div class="step"><span class="n">2</span><div><h2>بصمات المواقف</h2><div id="calib"></div></div></div></div>
+    <div class="blk"><div class="step"><span class="n">3</span><div><h2>الاختبار وقياس الدقة</h2><div id="results"></div></div></div></div>
+    <div class="blk"><h2>خطة التجربة</h2>
+      <ol class="hint" style="padding-inline-start:20px;margin:0">
+        <li>وحدة تضبط المخطط وتثبّت المرجع (خطوة 1) وتطبقه للجميع.</li>
+        <li>كل وحدة بجهازها تقف بموقف وتسجل بصمته (خطوة 2) ثم تطلع منه، لين يصير لكل موقف بصمة.</li>
+        <li>وحدة تركن بسيارتها بموقف، والباقيات يقفن برا المواقف ويراقبن تبويب الخريطة: الموقف لازم يتحول لمشغول لحاله.</li>
+        <li>لما تغادر السيارة، لازم يرجع متاح لحاله. بدون أي تأكيد يدوي.</li>
+      </ol></div>
+  </section>
+
+  <section class="tab" id="tab-sdk">
+    <div class="blk first"><h2>المستشعرات</h2><dl id="sensors" class="kv"></dl></div>
+    <div class="blk"><h2>كشف الأحداث</h2><ol id="stepper" class="stp"></ol><div id="result" class="result"></div></div>
+    <div class="blk"><h2>سجل الأحداث</h2><ul id="events" class="evl"></ul></div>
+    <div class="blk"><h2>اللي يُرسل للخادم</h2><pre id="payload" dir="ltr"></pre></div>
+  </section>
+
+  <section class="tab" id="tab-crowd">
+    <div class="blk first"><h2>المتصلون الآن</h2><ul class="feed" id="online"></ul></div>
+    <div class="blk"><h2>Parking AI</h2><div id="ai"></div></div>
+    <div class="blk"><h2>حالة المواقف</h2><table class="tbl" id="spotTable"></table></div>
+    <div class="blk"><h2>آخر المساهمات</h2><ul class="feed" id="feed"></ul></div>
+    <div class="blk"><h2>ضمان الدقة ومنع التلاعب</h2><ul class="chk-list" id="guard"></ul></div>
+  </section>
+
+  <section class="tab" id="tab-pts">
+    <div class="blk first" id="pts"></div>
+    <div class="blk"><h2>المكافآت</h2><div id="rewards"></div><p class="hint">مكافآت تجريبية لتوضيح الفكرة.</p></div>
+    <div class="blk"><h2>آخر النقاط</h2><ul class="feed" id="plog"></ul></div>
+    <div class="blk"><h2>الخصوصية</h2><div id="privacy"></div></div>
+  </section>
+</div>
+
+<nav class="nav" id="nav">
+  <button data-act="tab" data-v="map" class="on"><svg viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>الخريطة</button>
+  <button data-act="tab" data-v="lab"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v6l-5.5 9.5A1.5 1.5 0 0 0 5.8 21h12.4a1.5 1.5 0 0 0 1.3-2.5L14 9V3"/><path d="M7.5 15h9"/></svg>الاختبار</button>
+  <button data-act="tab" data-v="sdk"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.2"/><path d="M7.8 7.8a6 6 0 0 0 0 8.4M16.2 7.8a6 6 0 0 1 0 8.4M4.9 4.9a10 10 0 0 0 0 14.2M19.1 4.9a10 10 0 0 1 0 14.2"/></svg>الـSDK</button>
+  <button data-act="tab" data-v="crowd"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.4"/><path d="M3.5 19c.6-3.3 2.9-5 5.5-5s4.9 1.7 5.5 5M15 14.2c2.6-.5 5 .9 5.6 4.3"/></svg>المجتمع</button>
+  <button data-act="tab" data-v="pts"><svg viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.9 6.8 19.7l1-5.9L3.5 9.7l5.9-.8z"/></svg>نقاطي</button>
+</nav>
+<div id="toast" role="status" aria-live="polite"></div>
+<div id="modal"></div>
+
+<script>
+(function(){
+'use strict';
+/* ============ helpers ============ */
+const NET={ok:false,skew:0,rev:0,es:null,presence:[],name:''};
+const nowS=()=>Date.now()+NET.skew;
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const clamp=(x,a,b)=>Math.min(b,Math.max(a,x));
+const NS='http://www.w3.org/2000/svg';
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const store={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
+const rnd=(a,b)=>a+Math.random()*(b-a);
+const gauss=()=>{let u=0,v=0;while(!u)u=Math.random();while(!v)v=Math.random();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)};
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const ago=ts=>{const s=Math.max(0,Math.round((nowS()-ts)/1000));if(s<5)return 'الحين';if(s<60)return 'قبل '+s+' ثواني';const m=Math.round(s/60);if(m<60)return m===1?'قبل دقيقة':'قبل '+m+' دقائق';const h=Math.round(m/60);return h===1?'قبل ساعة':'قبل '+h+' ساعات'};
+function svg(tag,at,par){const e=document.createElementNS(NS,tag);for(const k in at)e.setAttribute(k,at[k]);if(par)par.appendChild(e);return e}
+let toastT=null;
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('on'),3000)}
+function armed(btn,label,fn){
+  if(!btn.dataset.armed){btn.dataset.armed='1';btn.dataset.label=btn.textContent;btn.textContent='اضغط مرة ثانية للتأكيد';setTimeout(()=>{if(btn.isConnected){btn.dataset.armed='';btn.textContent=btn.dataset.label}},4000);return}
+  btn.dataset.armed='';btn.textContent=btn.dataset.label;fn();
+}
+
+/* ============ lot geometry (meters; lot frame: u=right, v=up) ============ */
+const LOT=Object.assign({lat:24.7136,lng:46.6753,rot:0},store.get('mq.lot',{}));
+const CFG=Object.assign({rows:4,sides:'both',spotW:2.6,spotL:5,aisle:6,start:101},store.get('mq.cfg',{}));
+const DRAFT=Object.assign({},CFG);
+const G={margin:4,zone:{u0:-9,u1:9,v0:-9,v1:9},tz:{u0:-9,u1:9,v0:-9,v1:9}};
+const SPOTS=[],SPOT_IDS=new Set(),EXIT={u:0,v:-19};
+const M_LAT=110540, mLng=()=>111320*Math.cos(LOT.lat*Math.PI/180);
+function toLot(lat,lng){const dx=(lng-LOT.lng)*mLng(),dy=(lat-LOT.lat)*M_LAT,t=LOT.rot*Math.PI/180;return{u:dx*Math.cos(t)+dy*Math.sin(t),v:-dx*Math.sin(t)+dy*Math.cos(t)}}
+function toGeo(u,v){const t=LOT.rot*Math.PI/180;return{lat:LOT.lat+(u*Math.sin(t)+v*Math.cos(t))/M_LAT,lng:LOT.lng+(u*Math.cos(t)-v*Math.sin(t))/mLng()}}
+const inSpotU=u=>Math.abs(u)>CFG.aisle/2-0.6;
+const inZone=(p,pad=0)=>p.u>=G.zone.u0-pad&&p.u<=G.zone.u1+pad&&p.v>=G.zone.v0-pad&&p.v<=G.zone.v1+pad;
+const dist=(a,b)=>Math.hypot(a.u-b.u,a.v-b.v);
+function buildLot(){
+  SPOTS.length=0;SPOT_IDS.clear();
+  const sides=CFG.sides==='both'?[-1,1]:CFG.sides==='left'?[-1]:[1];
+  sides.forEach((sd,si)=>{for(let r=0;r<CFG.rows;r++){const id='P'+(CFG.start+si*CFG.rows+r);SPOTS.push({id,u:sd*(CFG.aisle/2+CFG.spotL/2),v:((CFG.rows-1)/2-r)*CFG.spotW});SPOT_IDS.add(id)}});
+  computeZone();
+  EXIT.u=0;EXIT.v=G.tz.v0-10;
+}
+function computeZone(){
+  let u0=-CFG.aisle/2,u1=CFG.aisle/2,v0=1e9,v1=-1e9;
+  SPOTS.forEach(sp=>{u0=Math.min(u0,sp.u-CFG.spotL/2);u1=Math.max(u1,sp.u+CFG.spotL/2);v0=Math.min(v0,sp.v-CFG.spotW/2);v1=Math.max(v1,sp.v+CFG.spotW/2)});
+  const m=G.margin;
+  G.tz={u0:u0-m,u1:u1+m,v0:v0-m,v1:v1+m};
+  let a=u0,b=u1,c=v0,d=v1;
+  SPOTS.forEach(sp=>{const f=fpAgg(sp.id);if(f){const p=toLot(f.lat,f.lng);a=Math.min(a,p.u);b=Math.max(b,p.u);c=Math.min(c,p.v);d=Math.max(d,p.v)}});
+  G.zone={u0:a-m,u1:b+m,v0:c-m,v1:d+m};
+  updateZoneEl();
+}
+
+/* ============ prefs & persisted state ============ */
+const P={T_STOP:4,T_PARK:18,T_SEARCH:25,V_MOVE:1.4,V_STOP:0.7,D_LEAVE:6,D_RETURN:5};
+const PR=Object.assign({scale:3,acc:3,crowd:true,consent:false,share:true,mode:'real',useFp:true,testMode:true},store.get('mq.prefs',{}));
+const PT=Object.assign({pts:0,log:[],redeemed:[]},store.get('mq.pts',{}));
+const FP=store.get('mq.fp',{});          // بصمات محلية (وضع المحاكاة أو بدون خادم)
+const SIMTESTS=[];                        // نتائج المحاكاة
+let TESTS=[];const LOCALT=[];             // نتائج حقيقية (من الخادم / لم تُرسل)
+const savePR=()=>store.set('mq.prefs',PR), savePT=()=>store.set('mq.pts',PT);
+let UID=store.get('mq.uid',null);
+if(!UID){UID='u'+Math.random().toString(36).slice(2,12);store.set('mq.uid',UID)}
+NET.name=store.get('mq.name','');
+const NAMES=new Map();
+
+/* ============ app state ============ */
+const S={mode:PR.mode==='sim'?'sim':'real',sensing:false,last:null,buf:[],est:null,hd:null,st:'OUT',stSince:0,mov:false,prevMov:false,movSince:0,inZ:false,
+  stat:[],stopT:0,searched:false,parked:null,events:[],payload:null,speed:0,compass:null,accelVar:null,walking:false,awayN:0,gpsErr:null,sel:null,guide:null,
+  confT:[],hist:[],cap:null,calRun:false,lastCapAt:0};
+const SPOT_STATE={};
+let REP={};
+const remote=new Map(), localR=new Map(), simR=new Map(), FPS=new Map();
+
+/* ============ fingerprints (shared via server in real mode) ============ */
+function fpAgg(id,ignoreToggle){
+  if(!PR.useFp&&!ignoreToggle)return null;
+  if(S.mode==='real'&&NET.ok){
+    const rows=FPS.get(id);if(!rows||!rows.length)return null;
+    let sv=0,la=0,ln=0;const us=new Set();
+    for(const r of rows){const w=Math.max(1,r.v||1);sv+=w;la+=r.lat*w;ln+=r.lng*w;us.add(r.uid)}
+    return{lat:la/sv,lng:ln/sv,v:sv,users:us.size};
+  }
+  const f=FP[id];return f?{lat:f.lat,lng:f.lng,v:f.v||1,users:1}:null;
+}
+function upsertFpRow(r){
+  if(!r||!SPOT_IDS.has(r.spot))return;
+  const a=FPS.get(r.spot)||[];const i=a.findIndex(x=>x.uid===r.uid);
+  const row={uid:r.uid,name:r.name,lat:+r.lat,lng:+r.lng,acc:+r.acc,v:+r.v||1,ts:(+r.ts||0)*1000};
+  if(i>=0)a[i]=row;else a.push(row);
+  FPS.set(r.spot,a);
+}
+
+/* ============ aggregation: sensor + crowd reports -> availability score ============ */
+const SRC_W={sdk:5,manual:3.5,sim:4};
+const BL={free:'متاح جداً',likely:'متاح غالباً',unsure:'غير مؤكد',busy:'غالباً مشغول',unk:'لا بيانات'};
+function allReports(){
+  let list;
+  if(S.mode==='real'){
+    const m=new Map();
+    remote.forEach((r,k)=>m.set(k,r));
+    localR.forEach((r,k)=>{if(!r.sim){const o=m.get(k);if(!o||r.ts>o.ts)m.set(k,r)}});
+    list=[...m.values()];
+  }else{
+    list=[];localR.forEach(r=>{if(r.sim)list.push(r)});simR.forEach(r=>list.push(r));
+  }
+  return list.filter(r=>SPOT_IDS.has(r.spot));
+}
+function rawW(r,now){const age=Math.max(0,(now-r.ts)/1000);const hl=r.state==='free'?480:3600;return (SRC_W[r.src]||2)*clamp(r.conf,0.05,1)*Math.pow(0.5,age/hl)}
+function computeSpots(){
+  const now=nowS(),all=allReports(),by={};
+  SPOTS.forEach(s=>by[s.id]=[]);
+  for(const k in SPOT_STATE)if(!SPOT_IDS.has(k))delete SPOT_STATE[k];
+  const burst={};
+  all.forEach(r=>{if(now-r.ts<60000)burst[r.uid]=(burst[r.uid]||0)+1;if(by[r.spot])by[r.spot].push(r)});
+  const evid=(list,rep,skip)=>{
+    let Ef=0,Eo=0,latest=null;
+    for(const r of list){if(r===skip)continue;if(rawW(r,now)>=0.4&&(!latest||r.ts>latest.ts))latest=r}
+    for(const r of list){
+      if(r===skip)continue;
+      let w=rawW(r,now)*(rep[r.uid]!=null?rep[r.uid]:1)*((burst[r.uid]||0)>8?0.2:1);
+      if(latest&&r.state!==latest.state&&r.ts<latest.ts-3000)w*=0.2;
+      if(r.state==='free')Ef+=w;else Eo+=w;
+    }
+    return{Ef,Eo};
+  };
+  const agree={},tot={};
+  for(const id in by){const list=by[id];for(const r of list){const e=evid(list,{},r);if(e.Ef+e.Eo>=2){tot[r.uid]=(tot[r.uid]||0)+1;if((r.state==='free')===(e.Ef>e.Eo))agree[r.uid]=(agree[r.uid]||0)+1}}}
+  const rep={};
+  for(const u in tot)rep[u]=tot[u]>=2?clamp(0.6+0.7*(agree[u]||0)/tot[u],0.4,1.3):1;
+  REP=rep;
+  S.spam=Object.keys(burst).filter(u=>burst[u]>8).length;
+  for(const sp of SPOTS){
+    const list=by[sp.id],{Ef,Eo}=evid(list,rep,null),t=Ef+Eo,pFree=(Ef+0.5)/(t+1);
+    const live=list.filter(r=>rawW(r,now)>0.15);
+    const known=t>=0.4,score=Math.round(pFree*100);
+    SPOT_STATE[sp.id]={pFree,score,known,tot:t,band:!known?'unk':score>=90?'free':score>=70?'likely':score>=40?'unsure':'busy',
+      n:new Set(live.map(r=>r.uid)).size,srcs:new Set(live.map(r=>r.src)),last:known?list.reduce((m,r)=>Math.max(m,r.ts),0):0,conflict:Ef>1&&Eo>1};
+  }
+}
+let dirty=false;
+function recompute(){if(dirty)return;dirty=true;setTimeout(()=>{dirty=false;computeSpots();updateSpots();renderSpotCard();renderCrowd();renderPoints();renderCalib()},60)}
+
+/* ============ server sync ============ */
+async function api(path,method,body){
+  try{
+    const r=await fetch(path,{method:method||'GET',headers:body?{'Content-Type':'application/json'}:undefined,body:body?JSON.stringify(body):undefined,cache:'no-store'});
+    if(!r.ok){let m='';try{m=(await r.json()).detail||''}catch(e){}return{__err:r.status,detail:m}}
+    return await r.json();
+  }catch(e){return null}
+}
+const okRes=r=>r&&!r.__err;
+function cleanRow(x){
+  if(!x||!SPOT_IDS.has(String(x.spot)))return null;
+  const state=x.state==='free'?'free':x.state==='occupied'?'occupied':null;if(!state)return null;
+  const ts=Number(x.ts)*1000;if(!isFinite(ts))return null;
+  return{uid:String(x.uid).slice(0,40),name:String(x.name||'').slice(0,24),spot:String(x.spot),state,src:x.src==='manual'?'manual':'sdk',conf:clamp(Number(x.conf)||0,0,1),ts:Math.min(ts,nowS())};
+}
+function cleanTest(x){
+  if(!x||!x.truth||!x.pred)return null;
+  return{id:x.id,uid:x.uid,name:String(x.name||'').slice(0,24),ts:(+x.ts||0)*1000,lat:+x.lat,lng:+x.lng,acc:+x.acc,pred:x.pred,conf:+x.conf,method:x.method,truth:x.truth};
+}
+function applyLot(l){
+  if(!l||l.rev===NET.rev)return;
+  NET.rev=l.rev;
+  Object.assign(LOT,{lat:+l.lat,lng:+l.lng,rot:+l.rot});
+  Object.assign(CFG,{rows:+l.rows,sides:l.sides,spotW:+l.spotW,spotL:+l.spotL,aisle:+l.aisle,start:+l.start});
+  Object.assign(DRAFT,CFG);
+  store.set('mq.lot',LOT);store.set('mq.cfg',CFG);
+  buildLot();drawMap();resetPipeline();
+  SIM.car.u=EXIT.u;SIM.car.v=EXIT.v;SIM.car.path=[];SIM.script=[];
+  S.sel=null;S.guide=null;
+  computeSpots();updateSpots();renderAll();
+}
+function applyState(st){
+  NET.skew=st.now*1000-Date.now();
+  if(st.lot)applyLot(st.lot);
+  remote.clear();(st.reports||[]).forEach(x=>{const r=cleanRow(x);if(r){remote.set(r.spot+'__'+r.uid,r);NAMES.set(r.uid,r.name)}});
+  FPS.clear();(st.fps||[]).forEach(upsertFpRow);
+  TESTS=(st.tests||[]).map(cleanTest).filter(Boolean);
+  NET.presence=st.presence||[];
+  computeZone();updateFp();recompute();renderConn();renderResults();renderCrowd();
+}
+async function syncState(){
+  const st=await api('/api/state');
+  if(!okRes(st)){if(NET.ok){NET.ok=false;renderConn();renderStatus()}return false}
+  const was=NET.ok;NET.ok=true;
+  applyState(st);
+  if(!st.lot)pushLot();
+  if(!was){renderAll()}
+  return true;
+}
+async function pushLot(){
+  const body=Object.assign({lat:LOT.lat,lng:LOT.lng,rot:LOT.rot,by:NET.name||null},{rows:CFG.rows,sides:CFG.sides,spotW:CFG.spotW,spotL:CFG.spotL,aisle:CFG.aisle,start:CFG.start});
+  store.set('mq.lot',LOT);store.set('mq.cfg',CFG);
+  if(!NET.ok){buildLot();drawMap();renderAll();return}
+  const r=await api('/api/lot','POST',body);
+  if(okRes(r)&&r.lot){NET.rev=0;applyLot(r.lot)}else toast('تعذّر حفظ المخطط بالخادم');
+}
+function handleMsg(m){
+  const d=m.d;
+  switch(m.t){
+    case 'report':{const r=cleanRow(d);if(r){remote.set(r.spot+'__'+r.uid,r);NAMES.set(r.uid,r.name);recompute()}break}
+    case 'report_del':remote.delete(d.spot+'__'+d.uid);recompute();break;
+    case 'fp':upsertFpRow(d);computeZone();updateFp();recompute();break;
+    case 'fp_del':
+      FPS.forEach((rows,sp)=>{if(!d.spot||d.spot===sp)FPS.set(sp,rows.filter(r=>r.uid!==d.uid))});
+      computeZone();updateFp();recompute();break;
+    case 'lot':applyLot(d);break;
+    case 'test':{const t=cleanTest(d);if(t&&!TESTS.some(x=>x.id===t.id)){TESTS.unshift(t);renderResults()}break}
+    case 'presence':NET.presence=d;renderCrowd();renderConn();break;
+    case 'reset':syncState();break;
+  }
+}
+function startStream(){
+  if(!window.EventSource||NET.es)return;
+  try{
+    const es=new EventSource('/api/stream');NET.es=es;
+    es.onmessage=e=>{try{handleMsg(JSON.parse(e.data))}catch(x){}};
+    es.onopen=()=>{syncState()};
+  }catch(e){}
+}
+async function ping(){
+  const r=await api('/api/ping','POST',{uid:UID,name:NET.name||'مجهولة',mode:S.mode,st:S.st,spot:S.parked?S.parked.spot:null,sensing:!!S.sensing});
+  if(okRes(r)&&!NET.ok)syncState();
+}
+
+/* ============ crowd reports ============ */
+const rkey=(spot,uid)=>spot+'__'+uid;
+function pushReport(spot,state,src,conf){
+  conf=+clamp(conf,0,1).toFixed(2);
+  const rec={uid:UID,name:NET.name,spot,state,src,conf,ts:nowS()};
+  const k=rkey(spot,UID);
+  if(S.mode==='real'){
+    localR.set(k,rec);
+    if(NET.ok){
+      api('/api/report','POST',{spot,uid:UID,name:NET.name||'',state,src,conf}).then(r=>{
+        if(okRes(r)&&r.row){const c=cleanRow(r.row);if(c){remote.set(k,c);localR.delete(k);recompute()}}
+        else if(r&&r.__err===429)toast('تقارير كثيرة بوقت قصير');
+      });
+    }
+  }else localR.set(k,Object.assign({sim:true},rec));
+  recompute();
+}
+function retractReport(spot){
+  const k=rkey(spot,UID);
+  localR.delete(k);
+  if(S.mode==='real'){remote.delete(k);if(NET.ok)api('/api/report?spot='+spot+'&uid='+UID,'DELETE')}
+  recompute();
+}
+
+/* ============ SDK pipeline: samples -> events -> spot match -> reports ============ */
+const ST_LABEL={OUT:['خارج منطقة المواقف','تتحرك خارج الحدود الجغرافية'],MOVING:['داخل منطقة المواقف','تتحرك وندوّر على موقف'],STOPPED:['توقفت','نراقب: وقفة مؤقتة أو ركن؟'],PARKED:['ركنت','ثابتة داخل المنطقة'],LEAVING:['بدأت المغادرة','ابتعدت عن مكان الركن'],AWAY:['نزلتِ من السيارة','السيارة باقية، والموقف يبقى مشغول']};
+const EV_TXT={zone_enter:'دخلت منطقة المواقف',searching:'تدوّر على موقف',stop:'توقفت داخل المنطقة',park:'ركنت',depart:'غادرت الموقف',zone_exit:'خرجت من المنطقة',confirm:'تأكيد يدوي',left_car:'نزلت من السيارة (الموقف يبقى مشغول)',returned:'رجعت لسيارتك',refine:'حدّثنا مكان الركن بقراءات أكثر'};
+function setSt(st,t){S.st=st;S.stSince=t;if(st==='MOVING')S.searched=false}
+function resetPipeline(){Object.assign(S,{last:null,buf:[],est:null,hd:null,st:'OUT',stSince:0,mov:false,prevMov:false,movSince:0,inZ:false,stat:[],parked:null,speed:0,searched:false,awayN:0,cap:null});const p=$('#prompt');if(p)p.innerHTML=''}
+function process(s){
+  const p=toLot(s.lat,s.lng);s.u=p.u;s.v=p.v;
+  S.last=s;S.buf.push(s);
+  while(S.buf.length&&s.t-S.buf[0].t>20000)S.buf.shift();
+  let v=s.speed;
+  if(v==null){
+    const old=S.buf.find(x=>s.t-x.t<=5000&&s.t-x.t>=2000);
+    v=old?Math.max(0,dist(s,old)-0.5*Math.max(s.acc,3))/((s.t-old.t)/1000):0;
+    if(s.accelVar!=null&&s.accelVar>0.8&&!S.walking)v=Math.max(v,P.V_MOVE);
+  }
+  S.speed=v;
+  S.mov=S.mov?v>P.V_STOP:v>P.V_MOVE;
+  if(S.mov!==S.prevMov){S.movSince=s.t;S.prevMov=S.mov}
+  if(S.cap&&!S.mov){S.cap.lat+=s.lat;S.cap.lng+=s.lng;S.cap.acc+=s.acc;S.cap.n++;if(S.cap.n>=10)finishCap();else renderCapUI()}
+  const dur=(s.t-S.movSince)/1000;
+  if(!S.est)S.est={u:s.u,v:s.v};else{const a=(S.st==='STOPPED'||S.st==='PARKED')?0.15:0.5;S.est.u+=a*(s.u-S.est.u);S.est.v+=a*(s.v-S.est.v)}
+  if(s.heading!=null&&v>1){const b=s.heading*Math.PI/180,t=LOT.rot*Math.PI/180,dx=Math.sin(b),dy=Math.cos(b);S.hd={hu:dx*Math.cos(t)+dy*Math.sin(t),hv:-dx*Math.sin(t)+dy*Math.cos(t)}}
+  const zin=inZone(p,S.inZ?2+0.5*s.acc:0);S.inZ=zin;
+  switch(S.st){
+    case 'OUT':
+      if(zin){setSt('MOVING',s.t);emit('zone_enter')}
+      break;
+    case 'MOVING':
+      if(!zin){setSt('OUT',s.t);emit('zone_exit');break}
+      if(!S.mov&&dur>=P.T_STOP){S.stopT=S.movSince;S.stat=S.buf.filter(x=>x.t>=S.movSince);setSt('STOPPED',s.t);emit('stop')}
+      else if(S.mov&&!S.searched&&(s.t-S.stSince)/1000>=P.T_SEARCH){S.searched=true;emit('searching')}
+      break;
+    case 'STOPPED':
+      S.stat.push(s);if(S.stat.length>600)S.stat.shift();
+      if(!zin){setSt('OUT',s.t);emit('zone_exit')}
+      else if(S.mov&&dur>=1.5)setSt('MOVING',s.t);
+      else if(!S.mov&&(s.t-S.stSince)/1000>=P.T_PARK-P.T_STOP){setSt('PARKED',s.t);doPark()}
+      break;
+    case 'PARKED':{
+      S.stat.push(s);if(S.stat.length>600)S.stat.shift();
+      const pk=S.parked,away=pk?dist(s,pk)-0.5*s.acc:0;
+      if(pk&&(s.t-S.stSince)/1000>=pk.nextRefine){pk.nextRefine+=30;refinePark()}
+      S.awayN=away>P.D_LEAVE?S.awayN+1:0;
+      if(S.awayN>=3&&(S.mov||away>2*P.D_LEAVE)){
+        S.awayN=0;
+        if(S.walking){setSt('AWAY',s.t);emit('left_car',{spot:pk.spot})}
+        else{doDepart();setSt(zin?'LEAVING':'OUT',s.t);if(!zin)emit('zone_exit')}
+      }
+      break}
+    case 'AWAY':
+      if(S.parked&&dist(s,S.parked)<P.D_RETURN){setSt('PARKED',s.t);S.awayN=0;emit('returned',{spot:S.parked.spot})}
+      break;
+    case 'LEAVING':
+      if(!zin){setSt('OUT',s.t);emit('zone_exit')}
+      else if(!S.mov&&dur>=P.T_STOP){S.stopT=S.movSince;S.stat=S.buf.filter(x=>x.t>=S.movSince);setSt('STOPPED',s.t);emit('stop')}
+      break;
+  }
+}
+function posterior(u,v,sigma,med,useFp,usePrior){
+  if(useFp===undefined)useFp=PR.useFp;
+  if(usePrior===undefined)usePrior=true;
+  const rows=SPOTS.map(sp=>{
+    const fp=useFp?fpAgg(sp.id,true):null;
+    let ref=sp,sg=sigma;
+    if(fp){ref=toLot(fp.lat,fp.lng);sg=Math.max(1.0,0.4*(med||3)*Math.sqrt(1+1/Math.max(1,fp.v)))}
+    const d=Math.hypot(u-ref.u,v-ref.v),st=SPOT_STATE[sp.id];
+    let lg=-0.5*(d/sg)*(d/sg)-Math.log(sg);
+    if(usePrior&&st&&st.known&&st.pFree<0.4)lg+=Math.log(0.25);
+    return{id:sp.id,lg,d};
+  });
+  const mx=Math.max(...rows.map(r=>r.lg));
+  rows.forEach(r=>r.l=Math.exp(r.lg-mx));
+  const sum=rows.reduce((a,r)=>a+r.l,0);
+  rows.forEach(r=>r.p=r.l/sum);
+  rows.sort((a,b)=>b.p-a.p);
+  return rows;
+}
+function estimatePark(){
+  let sw=0,su=0,sv=0,sla=0,sln=0;const accs=[];
+  S.stat.forEach(x=>{const w=1/Math.pow(Math.max(x.acc,2),2);sw+=w;su+=w*x.u;sv+=w*x.v;sla+=w*x.lat;sln+=w*x.lng;accs.push(x.acc)});
+  const u=su/sw,v=sv/sw;accs.sort((a,b)=>a-b);
+  const med=accs[accs.length>>1]||5,sigma=Math.max(1.6,0.55*med);
+  const rows=posterior(u,v,sigma,med);
+  return{u,v,med,sigma,rows,top:rows[0],cands:rows.slice(0,3).filter(r=>r.p>0.12),read:{lat:sla/sw,lng:sln/sw,acc:+med.toFixed(1)}};
+}
+function doPark(){
+  const e=estimatePark(),top=e.top,cands=e.cands;
+  const nfp=PR.useFp?SPOTS.filter(x=>fpAgg(x.id)).length:0,method=nfp===0?'geo':nfp===SPOTS.length?'fp':'mixed';
+  const calib=calibActive();
+  let truth=null;
+  if(S.mode==='sim')truth=SPOTS.reduce((b,s)=>dist(s,SIM.car)<dist(b,SIM.car)?s:b,SPOTS[0]).id;
+  S.parked={u:e.u,v:e.v,sigma:e.sigma,spot:top.id,conf:top.p,cands,reported:[],t:nowS(),method,truth,read:e.read,logged:false,calib,nextRefine:30};
+  S.awayN=0;
+  emit('park',{spot:top.id,conf:top.p,cands:cands.map(c=>({id:c.id,p:c.p})),truth,method,calib});
+  if(calib)return;   // أثناء المعايرة: ما نرسل تقارير ولا نحسب نقاط ولا نسجل اختبار
+  if(top.p>=0.3){pushReport(top.id,'occupied','sdk',top.p);S.parked.reported=[top.id]}
+  S.sel=top.id;
+  award(10,'ركن تلقائي بالـSDK');
+  updateSelection();renderSpotCard();
+  if(S.mode==='real'&&PR.testMode)showTestCard();
+}
+// كل 30 ثانية وهي واقفة: نعيد الحساب بكل القراءات المتجمعة (المتوسط الأطول يقلل انحراف الـGPS البطيء)
+function refinePark(){
+  const pk=S.parked;if(!pk)return;
+  const e=estimatePark(),top=e.top;
+  pk.u=e.u;pk.v=e.v;pk.read=e.read;pk.cands=e.cands;
+  if(top.id!==pk.spot&&top.p>=0.3&&top.p>pk.conf){
+    pk.reported.forEach(id=>retractReport(id));
+    pk.spot=top.id;pk.conf=top.p;pk.reported=[];
+    if(!pk.calib){pushReport(top.id,'occupied','sdk',top.p);pk.reported=[top.id];S.sel=top.id;updateSelection();renderSpotCard()}
+    emit('refine',{spot:top.id,conf:top.p,calib:pk.calib});
+  }else if(top.id===pk.spot&&Math.abs(top.p-pk.conf)>=0.1){
+    pk.conf=top.p;
+    if(!pk.calib&&pk.reported.length)pushReport(top.id,'occupied','sdk',top.p);
+  }
+}
+function doDepart(){
+  const pk=S.parked;if(!pk)return;
+  emit('depart',{spot:pk.spot,conf:pk.conf,calib:pk.calib});
+  pk.reported.forEach(id=>pushReport(id,'free','sdk',Math.max(0.6,pk.conf)));
+  if(!pk.calib){award(10,'مغادرة مسجّلة');if(S.mode==='sim')addTest(pk,pk.truth)}
+  S.parked=null;S.stat=[];$('#prompt').innerHTML='';
+}
+function emit(type,x){
+  const ev=Object.assign({type,t:nowS(),text:EV_TXT[type]},x||{});
+  S.events.unshift(ev);if(S.events.length>40)S.events.length=40;
+  const l=S.last;
+  S.payload={event:type,in_zone:S.inZ,probable_spot:ev.spot||null,confidence:ev.conf!=null?+ev.conf.toFixed(2):null,match:ev.method||null,
+    sensors:l?{accuracy_m:+l.acc.toFixed(1),speed_kmh:+(S.speed*3.6).toFixed(1),heading_deg:S.compass!=null?Math.round(S.compass):null,motion_var:S.accelVar!=null?+S.accelVar.toFixed(2):null}:null,
+    user:'anon-'+UID.slice(-6),ts:new Date(ev.t).toISOString(),transport:S.mode==='real'&&NET.ok?'server':'local-only'};
+  renderEvents();renderStepper();renderPayload();
+  return ev;
+}
+
+/* ============ ground-truth logging (for measuring accuracy only) ============ */
+function addTest(pk,truth){
+  const t={uid:UID,name:NET.name,ts:nowS(),lat:pk.read.lat,lng:pk.read.lng,acc:pk.read.acc,pred:pk.spot,conf:+pk.conf.toFixed(2),method:pk.method,truth};
+  if(S.mode==='sim'){SIMTESTS.unshift(t);renderResults();return}
+  if(NET.ok){
+    api('/api/test','POST',{uid:UID,name:NET.name||'',lat:t.lat,lng:t.lng,acc:t.acc,pred:t.pred,conf:t.conf,method:t.method,truth}).then(r=>{
+      if(okRes(r)&&r.row){const c=cleanTest(r.row);if(c&&!TESTS.some(x=>x.id===c.id))TESTS.unshift(c)}else LOCALT.unshift(t);renderResults()});
+  }else{LOCALT.unshift(t);renderResults()}
+}
+function showTestCard(){
+  const pk=S.parked;if(!pk||pk.logged){$('#prompt').innerHTML='';return}
+  const opts=SPOTS.map(s=>`<option value="${s.id}" ${s.id===pk.spot?'selected':''}>${s.id}</option>`).join('');
+  $('#prompt').innerHTML=`<div class="scard"><b>قرار النظام: ${pk.spot} (${Math.round(pk.conf*100)}%)</b><p class="hint">للاختبار فقط: وين ركنتي فعلياً؟ اختيارك ما يغيّر قرار النظام، يُستخدم لقياس الدقة.</p><div class="row"><select id="truthSel">${opts}</select><button class="btn pri" data-act="logtruth">سجّل النتيجة</button><button class="btn" data-act="skiptruth">تجاهل</button></div></div>`;
+}
+
+/* ============ manual confirmation with anti-fraud gating ============ */
+function estPos(){return S.est||(S.mode==='sim'?SIM.car:null)}
+function confirmSpot(id,state){
+  const sp=SPOTS.find(s=>s.id===id),pos=estPos();
+  if(!pos){toast('شغّل الـSDK أول عشان نتحقق من وجودك');return}
+  const now=Date.now();S.confT=S.confT.filter(t=>now-t<60000);
+  if(S.confT.length>=6){toast('تأكيدات كثيرة بوقت قصير، جرّب بعد شوي');return}
+  const d=dist(pos,sp);
+  if(d>12){toast('لازم تكون قريب من الموقف (أقل من 12 م) عشان تأكد. أنت على '+Math.round(d)+' م');return}
+  const before=SPOT_STATE[id];
+  const agreed=before.known&&((before.pFree>=0.5)===(state==='free'));
+  S.confT.push(now);
+  pushReport(id,state,'manual',0.9);
+  emit('confirm',{spot:id,text:'أكدت '+id+(state==='free'?' متاح':' مشغول')});
+  award(5+(agreed?3:0),agreed?'تأكيد يطابق المجتمع':'تأكيد موقف');
+}
+
+/* ============ points ============ */
+const REWARDS=[{n:'قهوة مجانية',c:200},{n:'خصم على المواقف',c:300},{n:'خصم في المطاعم',c:400},{n:'رصيد للبطاقة',c:500}];
+function level(){const p=PT.pts;return p>=300?['خبير',300,null]:p>=100?['مساهم',100,300]:['مبتدئ',0,100]}
+function award(n,why){if(S.calRun)return;PT.pts+=n;PT.log.unshift({t:nowS(),n,why});PT.log.length=Math.min(PT.log.length,30);savePT();renderPoints();toast('+'+n+' نقطة — '+why)}
+
+/* ============ simulator ============ */
+const SIM={t:Date.now(),accum:0,car:{u:0,v:-19,hu:0,hv:1,speed:0,path:[]},script:[],bu:0,bv:0,tgt:null};
+function routePts(from,to){
+  const pts=[];
+  if(inSpotU(from.u))pts.push({u:0,v:from.v});
+  if(inSpotU(to.u))pts.push({u:0,v:to.v});
+  pts.push({u:to.u,v:to.v});
+  return pts;
+}
+function simGo(to,tgt){S.calRun=false;SIM.script=[];SIM.car.path=routePts(SIM.car,to);SIM.tgt=tgt||null}
+function startScenario(){
+  if(S.mode!=='sim')return;
+  S.calRun=false;
+  const free=SPOTS.filter(s=>{const st=SPOT_STATE[s.id];return !st.known||st.pFree>=0.5});
+  const pool=free.length?free:SPOTS,sp=pool[Math.floor(Math.random()*pool.length)];
+  SIM.car.path=routePts(SIM.car,{u:EXIT.u,v:EXIT.v});
+  SIM.script=[{type:'go',to:sp,tgt:sp.id},{type:'wait',left:75},{type:'go',to:EXIT}];
+  S.sel=sp.id;updateSelection();renderSpotCard();
+}
+function simAdvance(dt){
+  const c=SIM.car;
+  if(!c.path.length&&SIM.script.length){
+    const st=SIM.script[0];
+    if(st.type==='go'){c.path=routePts(c,st.to);SIM.tgt=st.tgt||null;SIM.script.shift()}
+    else if(st.type==='cal'){startCap(st.id);SIM.script.shift()}
+    else{st.left-=dt;if(st.left<=0)SIM.script.shift()}
+  }
+  if(c.path.length){
+    const tg=c.path[0],dx=tg.u-c.u,dy=tg.v-c.v,d=Math.hypot(dx,dy);
+    const sp=(inSpotU(c.u)||inSpotU(tg.u))?1.8:3.2,step=sp*dt;
+    if(d>0.001){c.hu=dx/d;c.hv=dy/d}
+    if(d<=step){c.u=tg.u;c.v=tg.v;c.path.shift();c.speed=c.path.length?sp:0}
+    else{c.u+=c.hu*step;c.v+=c.hv*step;c.speed=sp}
+  }else c.speed=0;
+  if(S.calRun&&!c.path.length&&!SIM.script.length)S.calRun=false;
+  SIM.accum+=dt;
+  while(SIM.accum>=1){SIM.accum-=1;SIM.t+=1000;if(S.sensing&&S.mode==='sim')simSample()}
+}
+function simBias(u,v){const a=PR.acc*0.9;return{du:a*(0.8*Math.sin(0.55*u+0.3*v+1)+0.3*Math.cos(0.9*v)),dv:a*0.8*Math.cos(0.45*v-0.35*u+2)}}
+function simSample(){
+  const c=SIM.car,acc=Math.max(1,PR.acc*(1+0.12*gauss()));
+  SIM.bu=0.93*SIM.bu+0.147*acc*gauss();SIM.bv=0.93*SIM.bv+0.147*acc*gauss();
+  const bf=simBias(c.u,c.v),u=c.u+bf.du+SIM.bu+0.3*acc*gauss(),v=c.v+bf.dv+SIM.bv+0.3*acc*gauss(),g=toGeo(u,v),moving=c.speed>0.05,t=LOT.rot*Math.PI/180;
+  const ex=c.hu*Math.cos(t)-c.hv*Math.sin(t),ny=c.hu*Math.sin(t)+c.hv*Math.cos(t);
+  S.compass=(Math.atan2(ex,ny)*180/Math.PI+360)%360;
+  S.walking=false;
+  process({t:SIM.t,lat:g.lat,lng:g.lng,acc,speed:Math.max(0,c.speed+(moving?0.12:0.03)*gauss()),
+    accelVar:moving?Math.max(0.1,1.1+0.4*gauss()):Math.abs(0.03*gauss())+0.02,heading:moving?S.compass:null});
+  S.accelVar=S.last.accelVar;
+}
+function crowdSeed(){
+  simR.clear();
+  shuffle(SPOTS.map(s=>s.id)).slice(0,Math.max(1,Math.round(SPOTS.length*0.35))).forEach((sid,i)=>simR.set('v'+i+'__'+sid,{uid:'v'+(i%5),spot:sid,state:'occupied',src:'sim',conf:0.9,ts:nowS()-rnd(60,900)*1000}));
+}
+function crowdTick(){
+  if(PR.crowd&&S.mode==='sim'){
+    const u='v'+Math.floor(rnd(0,5)),mine=[...simR.values()].find(r=>r.uid===u&&r.state==='occupied');
+    if(mine){if(Math.random()<0.5)simR.set(u+'__'+mine.spot,Object.assign({},mine,{state:'free',conf:0.85,ts:nowS()}))}
+    else{
+      const busy=new Set([S.parked&&S.parked.spot,SIM.tgt]);
+      const cand=SPOTS.filter(s=>!busy.has(s.id)&&SPOT_STATE[s.id]&&SPOT_STATE[s.id].pFree>=0.4);
+      if(cand.length){const sid=cand[Math.floor(Math.random()*cand.length)].id;simR.set(u+'__'+sid,{uid:u,spot:sid,state:'occupied',src:'sim',conf:0.9,ts:nowS()})}
+    }
+    recompute();
+  }
+  setTimeout(crowdTick,rnd(5000,10000));
+}
+
+/* ============ real sensors (foreground only on the web) ============ */
+let watchId=null,MB=[],lastVar=0;
+function onMotion(e){
+  const a=e.accelerationIncludingGravity;if(!a)return;
+  const now=performance.now(),m=Math.hypot(a.x||0,a.y||0,a.z||0);
+  MB.push({t:now,m});
+  while(MB.length&&now-MB[0].t>3000)MB.shift();
+  if(now-lastVar>250&&MB.length>20){
+    lastVar=now;
+    const mean=MB.reduce((s,x)=>s+x.m,0)/MB.length;
+    const vr=MB.reduce((s,x)=>s+(x.m-mean)*(x.m-mean),0)/MB.length;
+    let cr=0,prev=null;
+    for(const x of MB){const up=x.m-mean>0;if(prev!==null&&up&&!prev)cr++;prev=up}
+    const f=cr/Math.max(0.5,(MB[MB.length-1].t-MB[0].t)/1000);
+    S.accelVar=vr;S.walking=vr>0.7&&f>=1.2&&f<=3.2;
+  }
+}
+function onOri(e){let h=null;if(e.webkitCompassHeading!=null)h=e.webkitCompassHeading;else if(e.absolute&&e.alpha!=null)h=(360-e.alpha)%360;if(h!=null)S.compass=h}
+function onPos(pos){
+  const c=pos.coords;S.gpsErr=null;
+  process({t:pos.timestamp,lat:c.latitude,lng:c.longitude,acc:c.accuracy||20,speed:c.speed,heading:c.heading,accelVar:S.accelVar});
+}
+function onPosErr(err){S.gpsErr=err.code===1?'إذن الموقع مرفوض. فعّله من إعدادات المتصفح.':'ما قدرنا نحدد الموقع. تأكد من تفعيل الـGPS.'}
+async function startReal(){
+  if(!PR.consent){openConsent();return}
+  if(!navigator.geolocation){S.gpsErr='المتصفح ما يدعم تحديد الموقع';renderAll();return}
+  const reqs=[];
+  try{if(typeof DeviceMotionEvent!=='undefined'&&typeof DeviceMotionEvent.requestPermission==='function')reqs.push(DeviceMotionEvent.requestPermission())}catch(e){}
+  try{if(typeof DeviceOrientationEvent!=='undefined'&&typeof DeviceOrientationEvent.requestPermission==='function')reqs.push(DeviceOrientationEvent.requestPermission())}catch(e){}
+  if(reqs.length)await Promise.allSettled(reqs);
+  window.addEventListener('devicemotion',onMotion);
+  window.addEventListener('deviceorientationabsolute',onOri,true);
+  window.addEventListener('deviceorientation',onOri,true);
+  resetPipeline();S.sensing=true;S.gpsErr=null;
+  watchId=navigator.geolocation.watchPosition(onPos,onPosErr,{enableHighAccuracy:true,maximumAge:0,timeout:20000});
+  renderAll();ping();
+}
+function stopReal(){
+  if(watchId!=null&&navigator.geolocation)navigator.geolocation.clearWatch(watchId);watchId=null;
+  window.removeEventListener('devicemotion',onMotion);
+  window.removeEventListener('deviceorientationabsolute',onOri,true);
+  window.removeEventListener('deviceorientation',onOri,true);
+  S.sensing=false;
+}
+function setLotHere(){
+  const apply=(lat,lng)=>{
+    LOT.lat=lat;LOT.lng=lng;
+    if(S.compass!=null){let r=-S.compass;if(r<-180)r+=360;if(r>180)r-=360;LOT.rot=Math.round(r)}
+    resetPipeline();pushLot();toast('تم اعتماد مكانك كمنتصف الممر'+(NET.ok?' وأُرسل للجميع':''));
+  };
+  if(S.last)return apply(S.last.lat,S.last.lng);
+  if(!navigator.geolocation){toast('الموقع غير متاح');return}
+  navigator.geolocation.getCurrentPosition(p=>apply(p.coords.latitude,p.coords.longitude),()=>toast('ما قدرنا نجيب موقعك'),{enableHighAccuracy:true,timeout:15000});
+}
+function setMode(m){
+  if(m===S.mode)return;
+  if(S.mode==='real')stopReal();
+  S.mode=m;PR.mode=m;savePR();resetPipeline();S.guide=null;S.sel=null;
+  if(m==='sim'){S.sensing=true;SIM.car.u=EXIT.u;SIM.car.v=EXIT.v;SIM.car.path=[];SIM.script=[];if(PR.crowd&&!simR.size)crowdSeed()}
+  else S.sensing=false;
+  computeSpots();updateSpots();renderAll();
+}
+
+/* ============ calibration (fingerprints) ============ */
+function startCap(id){
+  if(!S.sensing){toast('شغّل الاستشعار أول');return}
+  if(!SPOT_IDS.has(id)){toast('اختر موقف');return}
+  S.cap={id,n:0,lat:0,lng:0,acc:0};S.lastCapAt=Date.now();
+  toast('جاري تسجيل بصمة '+id+'، ابقَ ثابتة 10 ثواني');renderCapUI();
+}
+function finishCap(){
+  const c=S.cap;S.cap=null;S.lastCapAt=Date.now();if(!c||!c.n)return;
+  const lat=c.lat/c.n,lng=c.lng/c.n,acc=+(c.acc/c.n).toFixed(1);
+  if(S.mode==='real'&&NET.ok){
+    api('/api/fingerprint','POST',{spot:c.id,uid:UID,name:NET.name||'',lat,lng,acc}).then(r=>{
+      if(okRes(r)&&r.row){upsertFpRow(r.row);computeZone();updateFp();renderCalib();renderCtrl();toast('تم تسجيل بصمة '+c.id+' (الزيارة '+r.row.v+')')}
+      else toast('تعذّر حفظ البصمة بالخادم')});
+  }else{
+    const old=FP[c.id],v0=old?Math.min(old.v||1,7):0;
+    FP[c.id]={lat:old?(old.lat*v0+lat)/(v0+1):lat,lng:old?(old.lng*v0+lng)/(v0+1):lng,acc,n:c.n,v:v0+1,ts:Date.now()};
+    store.set('mq.fp',FP);computeZone();updateFp();toast('تم تسجيل بصمة '+c.id+(FP[c.id].v>1?' (الزيارة '+FP[c.id].v+')':''));
+  }
+  renderCalib();renderCapUI();
+}
+function startAutoCal(){
+  if(S.mode!=='sim')return;
+  S.calRun=true;SIM.car.path=routePts(SIM.car,EXIT);
+  const sc=[];for(let pass=0;pass<2;pass++)SPOTS.forEach(sp=>sc.push({type:'go',to:sp,tgt:sp.id},{type:'cal',id:sp.id},{type:'wait',left:11}));
+  sc.push({type:'go',to:EXIT});SIM.script=sc;
+  toast('معايرة تلقائية: السيارة تمر على كل موقف مرتين');
+}
+function updateFp(){
+  const g=$('#fpg');if(!g)return;g.textContent='';
+  if(!PR.useFp)return;
+  SPOTS.forEach(sp=>{const fp=fpAgg(sp.id);if(!fp)return;const p=toLot(fp.lat,fp.lng);
+    svg('line',{x1:sp.u,y1:-sp.v,x2:p.u,y2:-p.v,class:'m-fpl'},g);
+    svg('circle',{cx:p.u,cy:-p.v,r:0.4,class:'m-fp'},g)});
+}
+const calibActive=()=>!!S.cap||S.calRun||Date.now()-S.lastCapAt<90000;
+function fpCount(){return SPOTS.filter(s=>fpAgg(s.id,true)).length}
+
+/* ============ rendering: map ============ */
+const spotEls={};
+function drawMap(){
+  const m=$('#map');m.textContent='';
+  for(const k in spotEls)delete spotEls[k];
+  const A=(t,a,p)=>svg(t,a,p||m),T=G.tz;
+  const x0=Math.min(T.u0,-3)-2,x1=Math.max(T.u1,3)+2,y0=-T.v1-2,y1=-EXIT.v+3;
+  m.setAttribute('viewBox',x0+' '+y0+' '+(x1-x0)+' '+(y1-y0));
+  A('rect',{x:x0,y:y0,width:x1-x0,height:y1-y0,class:'m-bg'});
+  A('rect',{x:-CFG.aisle/2,y:-T.v0-1,width:CFG.aisle,height:y1+T.v0+1,class:'m-road'});
+  A('rect',{x:T.u0,y:-T.v1,width:T.u1-T.u0,height:T.v1-T.v0,rx:1.4,class:'m-lot'});
+  A('line',{x1:0,y1:-T.v0,x2:0,y2:y1,class:'m-dash'});
+  A('line',{x1:0,y1:-T.v1+1.4,x2:0,y2:-T.v0,class:'m-dash'});
+  A('rect',{id:'zoneR',class:'m-zone',rx:1.1});
+  const zl=A('text',{id:'zoneL',class:'m-zlabel'});zl.textContent='منطقة المواقف';
+  const en=A('text',{x:1.2,y:y1-1.6,class:'m-zlabel'});en.textContent='المدخل';
+  SPOTS.forEach(sp=>{
+    const g=A('g',{});
+    const r=A('rect',{x:sp.u-CFG.spotL/2,y:-sp.v-CFG.spotW/2,width:CFG.spotL,height:CFG.spotW,class:'m-spot','data-id':sp.id},g);
+    const cw=Math.min(3.8,CFG.spotL-0.8),ch=Math.min(1.7,CFG.spotW-0.6);
+    const c=A('rect',{x:sp.u-cw/2,y:-sp.v-ch/2,width:cw,height:ch,rx:0.55,class:'m-parked'},g);
+    const t1=A('text',{x:sp.u,y:-sp.v-0.12,class:'m-id'},g);t1.textContent=sp.id;
+    const t2=A('text',{x:sp.u,y:-sp.v+0.85,class:'m-pct'},g);
+    spotEls[sp.id]={r,c,t2};
+  });
+  A('rect',{id:'sel',class:'m-sel',width:CFG.spotL+0.5,height:CFG.spotW+0.5,rx:0.3,visibility:'hidden'});
+  A('polyline',{id:'route',class:'m-route',points:''});
+  A('circle',{id:'gpsC',class:'m-gps',r:0});
+  A('circle',{id:'estM',class:'m-est',r:0.32});
+  A('g',{id:'fpg'});
+  const car=A('g',{id:'car'}),b=A('g',{},car);
+  A('rect',{x:-0.95,y:-2.1,width:1.9,height:4.2,rx:0.75,class:'car-body'},b);
+  A('rect',{x:-0.72,y:-1.25,width:1.44,height:0.95,rx:0.3,class:'car-glass'},b);
+  A('rect',{x:-0.72,y:0.75,width:1.44,height:0.6,rx:0.25,class:'car-glass'},b);
+  $('#legend').innerHTML=['free','likely','unsure','busy','unk'].map(k=>`<span><i style="background:var(--m-${k})"></i>${BL[k]}</span>`).join('')+'<span><i style="background:transparent;border:1.5px solid #F4C542"></i>بصمة معايرة</span>';
+  updateZoneEl();updateFp();updateSpots();updateSelection();
+}
+function updateZoneEl(){
+  const z=$('#zoneR');if(!z)return;
+  const Z=G.zone;
+  z.setAttribute('x',Z.u0+0.35);z.setAttribute('y',-Z.v1+0.35);z.setAttribute('width',Math.max(1,Z.u1-Z.u0-0.7));z.setAttribute('height',Math.max(1,Z.v1-Z.v0-0.7));
+  const l=$('#zoneL');if(l){l.setAttribute('x',Z.u0+1);l.setAttribute('y',-Z.v1+1.7)}
+}
+function updateSpots(){
+  SPOTS.forEach(sp=>{
+    const st=SPOT_STATE[sp.id],e=spotEls[sp.id];if(!st||!e)return;
+    e.r.style.fill='var(--m-'+st.band+')';e.r.style.fillOpacity=st.band==='unk'?0.1:0.3;
+    e.t2.textContent=st.known?st.score+'%':'؟';e.t2.style.fill='var(--m-'+st.band+')';
+    e.c.style.display=(st.known&&st.pFree<0.4)?'block':'none';
+  });
+}
+function updateSelection(){
+  const s=$('#sel');if(!s)return;
+  const sp=SPOTS.find(x=>x.id===S.sel);
+  if(!sp){s.setAttribute('visibility','hidden');return}
+  s.setAttribute('x',sp.u-CFG.spotL/2-0.25);s.setAttribute('y',-sp.v-CFG.spotW/2-0.25);s.setAttribute('visibility','visible');
+}
+function viewPos(){
+  if(S.mode==='sim')return{u:SIM.car.u,v:SIM.car.v,hu:SIM.car.hu,hv:SIM.car.hv};
+  const p=S.est||S.last;if(!p)return null;
+  return{u:p.u,v:p.v,hu:S.hd?S.hd.hu:0,hv:S.hd?S.hd.hv:1};
+}
+function guidePath(from,sp){const pts=[{u:from.u,v:from.v}];if(inSpotU(from.u))pts.push({u:0,v:from.v});if(inSpotU(sp.u))pts.push({u:0,v:sp.v});pts.push({u:sp.u,v:sp.v});return pts}
+function pathLen(pts){let d=0;for(let i=1;i<pts.length;i++)d+=dist(pts[i-1],pts[i]);return d}
+let lastUI=0;
+function updateView(now){
+  const vp=viewPos(),car=$('#car'),gps=$('#gpsC'),em=$('#estM'),rt=$('#route');
+  if(!car)return;
+  if(vp){
+    car.setAttribute('visibility','visible');
+    car.setAttribute('transform','translate('+vp.u.toFixed(2)+' '+(-vp.v).toFixed(2)+') rotate('+(Math.atan2(vp.hu,vp.hv)*180/Math.PI).toFixed(1)+')');
+  }else car.setAttribute('visibility','hidden');
+  if(S.last&&S.sensing&&S.est){gps.setAttribute('cx',S.last.u);gps.setAttribute('cy',-S.last.v);gps.setAttribute('r',S.last.acc);em.setAttribute('cx',S.est.u);em.setAttribute('cy',-S.est.v);em.setAttribute('visibility','visible')}
+  else{gps.setAttribute('r',0);em.setAttribute('visibility','hidden')}
+  const gsp=S.guide&&SPOTS.find(x=>x.id===S.guide);
+  if(gsp&&vp){const pts=guidePath(vp,gsp);rt.setAttribute('points',pts.map(p=>p.u.toFixed(2)+','+(-p.v).toFixed(2)).join(' '));const gd=$('#gDist');if(gd){const d=pathLen(pts);gd.textContent=d<4?'وصلت':'تبعد '+Math.round(d)+' م'}}
+  else rt.setAttribute('points','');
+  const gd2=$('#dDist');if(gd2&&vp&&S.sel){const sp=SPOTS.find(x=>x.id===S.sel);if(sp)gd2.textContent='تبعد عنك '+Math.round(pathLen(guidePath(vp,sp)))+' م'}
+  if(now-lastUI>250){lastUI=now;renderStatus();renderSensors();$$('.ago').forEach(el=>el.textContent=ago(+el.dataset.ts))}
+}
+let lastFrame=performance.now();
+function frame(now){
+  const dt=Math.min(0.1,(now-lastFrame)/1000);lastFrame=now;
+  if(S.mode==='sim')simAdvance(dt*PR.scale);
+  updateView(now);
+  requestAnimationFrame(frame);
+}
+
+/* ============ rendering: panels ============ */
+function renderStatus(){
+  const [t,sub]=ST_LABEL[S.st];
+  let extra='';
+  if((S.st==='STOPPED'||S.st==='PARKED')&&S.last)extra=' — ثابتة منذ '+Math.max(0,Math.round((S.last.t-S.stopT)/1000))+' ث';
+  const msg=S.gpsErr?esc(S.gpsErr):(S.sensing?sub+extra:(S.mode==='real'?'أنتِ تتفرجين الحين. اضغطي «ابدأ الاستشعار» بالأسفل لو تبين تشاركين':'الـSDK متوقف'));
+  const net=S.mode==='sim'?'محاكاة':(NET.ok?'خادم متصل':'بدون خادم');
+  $('#status').innerHTML='<span class="pulse '+(S.sensing?'on':'')+'"></span><div><b>'+t+(S.st==='PARKED'&&S.parked?' في '+S.parked.spot:'')+'</b><small>'+msg+'</small></div><span class="mode">'+net+'</span>';
+}
+function renderCtrl(){
+  const c=$('#ctrl');
+  if(S.mode==='sim'){
+    c.innerHTML=`<h2>تحكم بالمحاكاة</h2>
+<div class="row"><button class="btn pri" data-act="scenario">شغّل سيناريو ركن كامل</button><button class="btn" data-act="leave">غادر</button><button class="btn" data-act="autocal">معايرة تلقائية</button></div>
+<p class="hint">أو اضغط على الخريطة: على موقف تشوف حالته، وعلى الممر تروح له السيارة. المحاكاة محلية وما تنرسل للخادم.</p>
+<div class="ctl"><label>سرعة الوقت</label><div class="seg sm">${[1,3,6].map(v=>`<button data-act="scale" data-v="${v}" class="${PR.scale===v?'on':''}">${v}×</button>`).join('')}</div></div>
+<div class="ctl"><label><span>دقة الـGPS (الرقم الأكبر = دقة أقل)</span><b id="accVal">${PR.acc} م</b></label><input type="range" id="accRange" min="1" max="12" step="0.5" value="${PR.acc}"></div>
+<label class="chk"><input type="checkbox" id="crowdChk" ${PR.crowd?'checked':''}> مستخدمون افتراضيون يركنون ويغادرون</label>`;
+  }else{
+    c.innerHTML=`<h2>الحساسات الحقيقية</h2>
+<div class="row">${S.sensing?'<button class="btn no" data-act="stopreal">أوقف الاستشعار</button>':'<button class="btn pri" data-act="startreal">ابدأ الاستشعار</button>'}</div>
+<p class="hint">يشتغل والصفحة مفتوحة والشاشة شغالة. ضبط المخطط والمرجع والبصمات من تبويب «الاختبار».</p>
+<p class="hint">النظام يكتشف الركن والمغادرة لحاله: ما فيه شي يدوي.</p>`;
+  }
+}
+function fmt(n,d){return n==null||isNaN(n)?'—':(+n).toFixed(d)}
+function renderSensors(){
+  const l=S.last,real=S.mode==='real';
+  const row=(k,v,m)=>`<dt>${k}</dt><dd class="${m?'mut':''}">${v}</dd>`;
+  $('#sensors').innerHTML=
+    row('مصدر البيانات',real?'حساسات الجهاز':'محاكاة (نفس مسار المعالجة)')+
+    row('الموقع الجغرافي (GPS)',l?'<span class="ltr">'+l.lat.toFixed(5)+', '+l.lng.toFixed(5)+'</span>':'—')+
+    row('دقة التحديد',l?fmt(l.acc,1)+' م':'—')+
+    row('السرعة',l?fmt(S.speed*3.6,1)+' كم/س':'—')+
+    row('مستشعرات الحركة',S.accelVar!=null?fmt(S.accelVar,2)+(S.walking?' — مشي':S.accelVar>0.6?' — اهتزاز':' — ثابت'):'—')+
+    row('البوصلة',S.compass!=null?Math.round(S.compass)+'°':'—')+
+    row('Wi‑Fi / Bluetooth','غير متاح في المتصفح',1)+
+    row('العمل بالخلفية','لا، يشتغل والصفحة مفتوحة',1);
+}
+function renderStepper(){
+  const idx={OUT:0,MOVING:1,STOPPED:2,PARKED:3,AWAY:3,LEAVING:4}[S.st];
+  const steps=[['السيارة تتحرك','قبل الوصول لمنطقة المواقف'],['دخلت منطقة المواقف','داخل الحدود الجغرافية'],['توقفت لفترة محددة','بعد '+P.T_STOP+' ثواني من التوقف'],['ثابتة داخل المنطقة','بعد '+P.T_PARK+' ثانية توقف = ركن، والموقف يتحدد بالبصمات'],['ابتعدت وغادرت','ابتعاد أكثر من '+P.D_LEAVE+' م عن مكان الركن = مغادرة']];
+  $('#stepper').innerHTML=steps.map((s,i)=>`<li class="${i<idx?'done':i===idx?'now':''}"><span class="n">${i+1}</span><div><b>${s[0]}</b><small>${s[1]}</small></div></li>`).join('');
+  const e=S.events[0];
+  $('#result').innerHTML='النتيجة: '+(e?'<b>'+esc(e.text)+'</b>'+(e.spot?' ('+e.spot+(e.conf!=null?' — '+Math.round(e.conf*100)+'%':'')+')':''):'ما فيه أحداث للحين');
+}
+function renderEvents(){
+  const el=$('#events');
+  if(!S.events.length){el.innerHTML='<li><span></span><span class="hint">ما فيه أحداث للحين.</span></li>';return}
+  el.innerHTML=S.events.slice(0,15).map(e=>{
+    let meta=ago(e.t);
+    if(e.type==='park'&&e.cands&&e.cands.length>1)meta+=' — بين '+e.cands.slice(0,2).map(c=>c.id+' ('+Math.round(c.p*100)+'%)').join(' و ');
+    if(e.truth)meta+=' — الفعلي بالمحاكاة: '+e.truth+(e.truth===e.spot?' ✓':' ✗');
+    if(e.calib)meta+=' — أثناء المعايرة، ما أُرسل للمجموعة';
+    if(e.method)meta+=' — '+({fp:'بالبصمات',mixed:'بصمات جزئية',geo:'بالإطار النظري'})[e.method];
+    return `<li><span class="d ${e.type}"></span><div>${esc(e.text)}${e.spot&&e.type!=='confirm'?' — '+e.spot:''}<small>${esc(meta)}</small></div></li>`;
+  }).join('');
+}
+function renderPayload(){$('#payload').textContent=S.payload?JSON.stringify(S.payload,null,2):'{ } // بانتظار أول حدث'}
+function renderSpotCard(){
+  const el=$('#spotCard'),id=S.sel;
+  if(!id||!SPOT_STATE[id]){el.innerHTML='<p class="hint">اضغط على أي موقف تشوف حالته ومصادر بياناته.</p>';return}
+  const st=SPOT_STATE[id];
+  const ev=st.tot>=6?'ثقة عالية':st.tot>=2.5?'ثقة متوسطة':st.known?'ثقة منخفضة':'ما فيه بيانات كافية';
+  const state=!st.known?'غير معروف':st.pFree>=0.5?'متاح':'مشغول';
+  const fp=fpAgg(id,true);
+  el.innerHTML=`<div class="scard"><div class="hd"><div><div class="sid">${id}</div><span class="chip ${st.band}">${state} — ${BL[st.band]}</span></div>
+<div class="big">${st.known?st.score+'%':'—'}<small>احتمال التوفر — ${ev}</small></div></div>
+<div class="meta"><span class="chip src">SDK الهاتف${st.srcs.has('sdk')||st.srcs.has('sim')?' ✓':''}</span><span class="chip src">مستخدمون: ${st.n}</span>${fp?'<span class="chip src">بصمة ✓ ('+fp.users+')</span>':'<span class="chip off">بلا بصمة</span>'}</div>
+<div class="hint">${st.known?'آخر تحديث <span class="ago" data-ts="'+st.last+'">'+ago(st.last)+'</span>':'ما وصلت أي إشارة لهذا الموقف بعد'}${st.conflict?' — فيه تضارب بالإشارات':''}<br><span id="dDist"></span></div>
+<div class="row"><button class="btn ${S.guide===id?'':'pri'}" data-act="guide" data-id="${id}">${S.guide===id?'أوقف التوجيه':'ابدأ التوجيه'}</button>
+<button class="btn ok" data-act="conf" data-id="${id}" data-st="free">أكّد أنه متاح</button>
+<button class="btn no" data-act="conf" data-id="${id}" data-st="occupied">أكّد أنه مشغول</button>
+${S.mode==='sim'?`<button class="btn" data-act="drive" data-id="${id}">سوّق السيارة هنا</button>`:''}</div>
+${S.guide===id?'<p class="hint" id="gDist"></p>':''}</div>`;
+}
+const ST_SHORT={OUT:'خارج المنطقة',MOVING:'داخل المنطقة',STOPPED:'توقفت',PARKED:'ركنت',LEAVING:'تغادر',AWAY:'نزلت من السيارة'};
+function renderCrowd(){
+  if(!$('#ai'))return;
+  const ss=SPOTS.map(s=>SPOT_STATE[s.id]).filter(Boolean),N=SPOTS.length;
+  const free=ss.filter(s=>s.known&&s.pFree>=0.6).length,occ=ss.filter(s=>s.known&&s.pFree<0.4).length,unk=N-free-occ;
+  const soon=occ*(1-Math.exp(-15/40));
+  const vp=viewPos();
+  let near='—';
+  if(vp){const c=SPOTS.filter(s=>SPOT_STATE[s.id]&&SPOT_STATE[s.id].known&&SPOT_STATE[s.id].pFree>=0.7).sort((a,b)=>pathLen(guidePath(vp,a))-pathLen(guidePath(vp,b)))[0];if(c)near=c.id+' ('+Math.round(pathLen(guidePath(vp,c)))+' م)'}
+  const contributors=new Set(allReports().map(r=>r.uid)).size,conflicts=ss.filter(s=>s.conflict).length;
+  const h=S.hist;
+  const spark=h.length>1?`<svg viewBox="0 0 120 30" width="100%" height="34" preserveAspectRatio="none" aria-label="الإشغال خلال الجلسة"><polyline fill="none" stroke="var(--brand)" stroke-width="1.6" points="${h.map((v,i)=>(i*120/Math.max(1,h.length-1)).toFixed(1)+','+(28-v/Math.max(1,N)*26).toFixed(1)).join(' ')}"/></svg>`:'<span class="hint">يتجمع بعد دقائق</span>';
+  $('#ai').innerHTML=`<div class="grid2"><div class="stat"><b>${free}</b><span>متاح الحين</span></div><div class="stat"><b>${occ}</b><span>مشغول</span></div><div class="stat"><b>${unk}</b><span>بدون بيانات</span></div><div class="stat"><b>~${soon.toFixed(1)}</b><span>يفضى خلال 15 دقيقة (تقدير مبسط)</span></div></div>
+<dl class="kv" style="margin-top:12px"><dt>أقرب موقف متاح لك</dt><dd>${near}</dd><dt>دمج بيانات المستخدمين</dt><dd>${contributors} مساهم</dd><dt>معالجة البيانات المتضاربة</dt><dd>${conflicts?conflicts+' موقف فيه تضارب':'ما فيه تضارب'}</dd><dt>الأنماط التاريخية (المشغول)</dt><dd>${spark}</dd></dl>
+<p class="hint">التنبؤ يفترض أن متوسط الركن 40 دقيقة، ويتحول لنموذج مع بيانات فعلية.</p>`;
+  $('#online').innerHTML=NET.ok?(NET.presence.length?NET.presence.map(p=>`<li><b>${esc(p.name)}</b>${p.uid===UID?' (أنتِ)':''} — ${p.mode==='sim'?'محاكاة':p.sensing?(ST_SHORT[p.st]||p.st)+(p.spot&&(p.st==='PARKED'||p.st==='AWAY')?' '+esc(p.spot):''):'تتفرج'}</li>`).join(''):'<li class="hint">ما فيه أحد متصل.</li>'):'<li class="hint">بدون خادم: ما تظهر قائمة المتصلين.</li>';
+  $('#spotTable').innerHTML=SPOTS.map(sp=>{const st=SPOT_STATE[sp.id];if(!st)return '';return `<tr data-act="pickrow" data-id="${sp.id}"><td><b>${sp.id}</b></td><td style="width:34%"><div class="bar"><i style="width:${st.known?st.score:0}%;background:var(--m-${st.band})"></i></div></td><td>${st.known?st.score+'%':'—'}</td><td><span class="chip ${st.band}">${BL[st.band]}</span></td></tr>`}).join('');
+  const rows=allReports().sort((a,b)=>b.ts-a.ts).slice(0,8);
+  $('#feed').innerHTML=rows.length?rows.map(r=>`<li>${r.uid===UID?'أنتِ':r.src==='sim'?'مستخدم افتراضي':esc(r.name||('مستخدمة '+r.uid.slice(-4)))} — ${r.spot} ${r.state==='free'?'متاح':'مشغول'}<small>${({sdk:'إشارة SDK',manual:'تأكيد يدوي',sim:'محاكاة'})[r.src]||''} — ${ago(r.ts)}</small></li>`).join(''):'<li class="hint">لا توجد مساهمات بعد.</li>';
+  const myRep=REP[UID]!=null?REP[UID]:1,multi=ss.filter(s=>s.n>=2).length;
+  $('#guard').innerHTML=[
+    ['نظام سمعة المستخدمين','سمعتك '+myRep.toFixed(2)+' — تتحدد بمطابقة تقاريرك للمجتمع'],
+    ['مساهمات متعددة لنفس الموقف',multi+' موقف مؤكد من أكثر من مستخدم'],
+    ['مراقبة الأنماط غير الطبيعية',S.spam?S.spam+' حساب تجاوز حد التقارير وخُفّض وزنه':'ما فيه نشاط مريب'],
+    ['انتهاء صلاحية البيانات','المشغول يتناقص وزنه للنصف كل 60 دقيقة، والمتاح كل 8 دقائق'],
+    ['التحقق من الوصول الفعلي','التأكيد اليدوي يتطلب أن تكون على بعد أقل من 12 م']
+  ].map(x=>`<li><div><b>${x[0]}</b><small>${x[1]}</small></div><span class="chip free">مفعّل</span></li>`).join('');
+}
+function renderPoints(){
+  if(!$('#pts'))return;
+  const [ln,lo,hi]=level(),pct=hi?Math.round((PT.pts-lo)/(hi-lo)*100):100;
+  $('#pts').innerHTML=`<div class="row" style="justify-content:space-between;align-items:flex-end"><div><div class="ptsn">${PT.pts}</div><div class="hint" style="margin:0">نقطة</div></div><span class="chip likely">${ln}</span></div><div class="lvl"><i style="width:${pct}%"></i></div><div class="hint">${hi?'باقي '+(hi-PT.pts)+' نقطة للمستوى التالي':'وصلتي لأعلى مستوى'} — كل مساهمة = نقاط، وكل نقطة = مكافأة</div>`;
+  $('#rewards').innerHTML=REWARDS.map((r,i)=>`<div class="rw"><div><b>${r.n}</b><small>${r.c} نقطة</small></div><button class="btn" data-act="redeem" data-i="${i}" ${PT.pts<r.c?'disabled':''}>استبدل</button></div>`).join('')+(PT.redeemed.length?'<div style="margin-top:10px">'+PT.redeemed.slice(0,5).map(x=>`<div class="hint">${esc(x.n)} — <span class="code">${esc(x.code)}</span></div>`).join('')+'</div>':'');
+  $('#plog').innerHTML=PT.log.length?PT.log.slice(0,8).map(x=>`<li>${x.n>0?'+':''}${x.n} — ${esc(x.why)}<small>${ago(x.t)}</small></li>`).join(''):'<li class="hint">ابدأ بسيناريو ركن وراقب النقاط.</li>';
+  $('#privacy').innerHTML=`<label class="chk"><input type="checkbox" id="shareChk" ${PR.share?'checked':''}> شارك تقاريري مع المجموعة</label>
+<p class="hint">تظهرين للآخرين باسمك المستعار فقط. الصلاحيات تُطلب مرة وحدة وتقدرين توقفينها بأي وقت.</p>
+<button class="btn no" data-act="withdraw">أوقف المشاركة واحذف بياناتي</button>`;
+}
+
+/* ---- lab tab ---- */
+function renderConn(){
+  const el=$('#labConn');if(!el)return;
+  el.innerHTML=`<div class="row" style="margin-bottom:8px"><span class="chip ${NET.ok?'free':'busy'}">${NET.ok?'متصل بالخادم':'غير متصل'}</span><span class="chip src">${NET.presence.length} متصل الحين</span></div>
+<label class="hint" for="nameIn" style="display:block">اسمك المستعار (يظهر لصديقاتك)</label>
+<input type="text" id="nameIn" maxlength="24" value="${esc(NET.name)}" placeholder="مثلاً: بدرية">
+${NET.ok?'':'<p class="hint">ما فيه اتصال بالخادم: البصمات والتقارير تنحفظ على جهازك فقط.</p>'}`;
+}
+function renderCfg(){
+  const d=DRAFT;
+  const sl=(k,label,min,max,step,unit)=>`<div class="ctl"><label><span>${label}</span><b id="v_${k}">${d[k]}${unit}</b></label><input type="range" data-cfg="${k}" data-unit="${unit}" min="${min}" max="${max}" step="${step}" value="${d[k]}"></div>`;
+  $('#cfg').innerHTML=`<p class="hint">خلي المخطط يقارب موقفكم الحقيقي: كم موقف بكل صف، وعلى أي جهة.</p>
+${sl('rows','عدد المواقف بكل صف',1,20,1,'')}
+<div class="ctl"><label>جهات المواقف</label><div class="seg sm">${[['both','الجهتين'],['left','يسار'],['right','يمين']].map(([v,t])=>`<button data-act="sides" data-v="${v}" class="${d.sides===v?'on':''}">${t}</button>`).join('')}</div></div>
+${sl('spotW','عرض الموقف',2.2,3.6,0.1,' م')}${sl('spotL','عمق الموقف',4,6.5,0.1,' م')}${sl('aisle','عرض الممر',3,12,0.5,' م')}
+<div class="row"><button class="btn pri" data-act="applycfg">طبّق المخطط${NET.ok?' للجميع':''}</button></div>
+<h3 style="margin-top:18px">المرجع على الأرض</h3>
+<p class="hint">وقفي بمنتصف الممر (بين صفّي المواقف) ووجّهي الجوال باتجاه طول الممر، ثم اضغطي الزر. هذا يثبّت مكان وزاوية الموقف لكل الأجهزة. يحتاج الاستشعار شغال.</p>
+<div class="row"><button class="btn" data-act="setlot">اضبط الموقف هنا</button></div>
+<div class="ctl"><label><span>تدوير الموقف</span><b id="rotVal">${LOT.rot}°</b></label><input type="range" id="rotRange" min="-180" max="180" step="5" value="${LOT.rot}"></div>
+<p class="hint ltr">${LOT.lat.toFixed(6)}, ${LOT.lng.toFixed(6)} — rev ${NET.rev}</p>`;
+}
+function capLabel(){
+  const id=S.sel;
+  if(S.cap)return 'جاري التسجيل '+S.cap.id+' ('+S.cap.n+'/10)';
+  return id?'سجّل بصمة '+id+' (10 ثواني)':'اختاري موقف أول';
+}
+function renderCapUI(){const b=$('#capBtn');if(b){b.textContent=capLabel();b.disabled=!!S.cap||!S.sel}renderSpotCard()}
+function renderCalib(){
+  const el=$('#calib');if(!el)return;
+  const n=fpCount();
+  el.innerHTML=`<p class="hint">وقفي داخل الموقف الحقيقي، اختاريه هنا، واضغطي «سجّل بصمة» وانتِ ثابتة. ${n} من ${SPOTS.length} مواقف لها بصمة. كل زيارة أو جهاز إضافي يرفع الدقة.</p>
+<div class="picks">${SPOTS.map(sp=>{const f=fpAgg(sp.id,true);return `<button class="pick ${f?'has':''} ${S.sel===sp.id?'sel':''}" data-act="labsel" data-id="${sp.id}">${sp.id}<small>${f?'✓ '+f.users+' جهاز':'—'}</small></button>`}).join('')}</div>
+<div class="row"><button class="btn pri" id="capBtn" data-act="cap" data-id="${S.sel||''}" ${S.cap||!S.sel?'disabled':''}>${capLabel()}</button></div>
+<label class="chk"><input type="checkbox" id="fpChk" ${PR.useFp?'checked':''}> استخدم البصمات في تحديد الموقف</label>
+<div class="row"><button class="btn no" data-act="clearfp" ${n?'':'disabled'}>امسح بصماتي</button></div>
+<details><summary>خيارات المشرفة</summary><p class="hint">مسح بيانات الجميع من الخادم.</p>
+<input type="password" id="adminKey" placeholder="مفتاح المشرفة (لو معيّن)" autocomplete="off">
+<div class="row" style="margin-top:8px"><button class="btn no" data-act="resetfps">امسح كل البصمات</button><button class="btn no" data-act="resetall">امسح كل شي</button></div></details>`;
+}
+function testsNow(){return S.mode==='sim'?SIMTESTS:[...LOCALT,...TESTS]}
+function evalTest(t,useFp){const p=toLot(t.lat,t.lng),med=t.acc||5;return posterior(p.u,p.v,Math.max(1.6,0.55*med),med,useFp,false)[0].id}
+function renderResults(){
+  const el=$('#results');if(!el)return;
+  const ts=testsNow().filter(t=>SPOT_IDS.has(t.truth));
+  let g=0,f=0,d=0;
+  ts.forEach(t=>{if(evalTest(t,false)===t.truth)g++;if(evalTest(t,true)===t.truth)f++;if(t.pred===t.truth)d++});
+  const n=ts.length,pc=x=>n?Math.round(x/n*100)+'%':'—';
+  const csv='time,name,lat,lng,acc,pred,conf,method,truth\n'+ts.map(t=>[new Date(t.ts).toISOString(),(t.name||'').replace(/,/g,' '),t.lat.toFixed(7),t.lng.toFixed(7),t.acc,t.pred,t.conf,t.method,t.truth].join(',')).join('\n');
+  el.innerHTML=`<label class="chk"><input type="checkbox" id="testChk" ${PR.testMode?'checked':''}> بعد كل ركن اسألني عن الموقف الفعلي (للقياس فقط)</label>
+<p class="hint">${S.mode==='sim'?'المحاكاة تسجل الحقيقة لحالها.':'اختيارك للموقف الفعلي ما يغيّر قرار النظام، يُستخدم فقط لحساب الدقة.'} النتائج تتجمع من كل الأجهزة.</p>
+<table class="tbl"><tr><th>الطريقة</th><th>عدد التجارب</th><th>الصحيح</th></tr>
+<tr><td>الإطار النظري فقط</td><td>${n}</td><td><b>${pc(g)}</b></td></tr>
+<tr><td>بالبصمات الحالية</td><td>${n}</td><td><b>${pc(f)}</b></td></tr>
+<tr><td>قرار النظام وقت التجربة</td><td>${n}</td><td><b>${pc(d)}</b></td></tr></table>
+<p class="hint">الجدولين الأولين يعيدان تقييم نفس القراءات بالطريقتين. لو سجّلتِ البصمة من نفس القراءة اللي تختبرينها ترتفع الدقة بشكل مضلل، فاختبري بركنات مستقلة.</p>
+<textarea readonly id="csvOut" aria-label="نتائج CSV">${esc(csv)}</textarea>
+<div class="row" style="margin-top:8px"><button class="btn" data-act="copycsv">انسخ النتائج</button><button class="btn no" data-act="cleartests">امسح نتائج الاختبار</button></div>`;
+}
+function renderLab(){renderConn();renderCfg();renderCalib();renderResults()}
+function renderAll(){renderStatus();renderCtrl();renderSensors();renderStepper();renderEvents();renderPayload();renderSpotCard();renderCrowd();renderPoints();renderLab();
+  $$('#modeSeg button').forEach(b=>b.classList.toggle('on',b.dataset.v===S.mode))}
+
+/* ============ consent, name, withdraw ============ */
+function openConsent(){
+  $('#modal').innerHTML=`<div class="modal"><div class="sheet"><h2>قبل ما نبدأ</h2><p>عشان يشتغل الاستشعار الحقيقي نحتاج:</p><ul><li>الموقع الجغرافي لكشف الدخول والركن والمغادرة</li><li>حساسات الحركة والبوصلة لتحسين الدقة</li></ul><p class="hint">تظهرين باسمك المستعار فقط، ونرسل الأحداث بدون تتبع مسارك. تقدرين تسحبين الموافقة وتحذفين بياناتك من تبويب «نقاطي».</p><div class="row"><button class="btn pri" data-act="consentok">أوافق وأبدأ</button><button class="btn" data-act="consentno">لاحقاً</button></div></div></div>`;
+}
+function openName(){
+  $('#modal').innerHTML=`<div class="modal"><div class="sheet"><h2>أهلاً 👋</h2><p>اكتبي اسمك المستعار عشان تعرفكم صديقاتك بالتجربة:</p><input type="text" id="nameFirst" maxlength="24" placeholder="مثلاً: بدرية"><div class="row" style="margin-top:12px"><button class="btn pri" data-act="namesave">ابدأ</button></div></div></div>`;
+}
+function withdraw(){
+  if(S.mode==='real')stopReal();
+  if(NET.ok){api('/api/fingerprint?uid='+UID,'DELETE');SPOTS.forEach(s=>api('/api/report?spot='+s.id+'&uid='+UID,'DELETE'))}
+  localR.clear();Object.keys(FP).forEach(k=>delete FP[k]);store.del('mq.fp');
+  PT.pts=0;PT.log=[];PT.redeemed=[];savePT();
+  PR.consent=false;savePR();S.events=[];S.parked=null;$('#prompt').innerHTML='';
+  updateFp();recompute();renderAll();toast('تم إيقاف المشاركة وحذف بياناتك');
+}
+
+/* ============ events ============ */
+function switchTab(name){
+  $$('.tab').forEach(t=>t.classList.toggle('on',t.id==='tab-'+name));
+  $$('#nav button').forEach(x=>x.classList.toggle('on',x.dataset.v===name));
+  window.scrollTo(0,0);
+}
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-act]');if(!b)return;
+  const a=b.dataset.act,id=b.dataset.id;
+  switch(a){
+    case 'tab':switchTab(b.dataset.v);break;
+    case 'mode':setMode(b.dataset.v);break;
+    case 'scenario':startScenario();break;
+    case 'leave':simGo(EXIT);break;
+    case 'scale':PR.scale=+b.dataset.v;savePR();renderCtrl();break;
+    case 'startreal':startReal();break;
+    case 'stopreal':stopReal();renderAll();break;
+    case 'setlot':armed(b,'',setLotHere);break;
+    case 'guide':S.guide=S.guide===id?null:id;renderSpotCard();break;
+    case 'conf':confirmSpot(id,b.dataset.st);break;
+    case 'drive':{const sp=SPOTS.find(s=>s.id===id);simGo(sp,id);break}
+    case 'pickrow':S.sel=id;updateSelection();renderSpotCard();switchTab('map');break;
+    case 'labsel':S.sel=id;updateSelection();renderSpotCard();renderCalib();break;
+    case 'cap':startCap(id);break;
+    case 'autocal':startAutoCal();break;
+    case 'sides':DRAFT.sides=b.dataset.v;renderCfg();break;
+    case 'applycfg':Object.assign(CFG,DRAFT);pushLot();break;
+    case 'clearfp':
+      if(S.mode==='real'&&NET.ok){api('/api/fingerprint?uid='+UID,'DELETE').then(()=>{FPS.forEach((rows,sp)=>FPS.set(sp,rows.filter(r=>r.uid!==UID)));computeZone();updateFp();renderCalib();toast('تم مسح بصماتك')})}
+      else{Object.keys(FP).forEach(k=>delete FP[k]);store.del('mq.fp');computeZone();updateFp();renderCalib();toast('تم مسح البصمات')}
+      break;
+    case 'resetfps':case 'resetall':{
+      const scope=a==='resetall'?'all':'fps',key=($('#adminKey')||{}).value||'';
+      armed(b,'',async()=>{
+        try{const r=await fetch('/api/reset',{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Key':key},body:JSON.stringify({scope})});
+          toast(r.ok?'تم المسح':'ما تمكنّا من المسح: يحتاج مفتاح المشرفة')}catch(x){toast('ما فيه اتصال بالخادم')}});
+      break}
+    case 'logtruth':{const pk=S.parked,sel=$('#truthSel');if(pk&&sel){pk.logged=true;addTest(pk,sel.value);$('#prompt').innerHTML='';toast('تم تسجيل النتيجة')}break}
+    case 'skiptruth':if(S.parked)S.parked.logged=true;$('#prompt').innerHTML='';break;
+    case 'copycsv':{const ta=$('#csvOut');if(ta){ta.select();let ok=false;try{ok=document.execCommand('copy')}catch(x){}toast(ok?'تم النسخ':'حددي النص وانسخيه يدوياً')}break}
+    case 'cleartests':armed(b,'',()=>{if(S.mode==='sim')SIMTESTS.length=0;else LOCALT.length=0;renderResults();toast('تم مسح النتائج المحلية. نتائج الخادم تُمسح من خيارات المشرفة')});break;
+    case 'redeem':{const r=REWARDS[+b.dataset.i];if(PT.pts>=r.c){PT.pts-=r.c;const code='MQ-'+Math.random().toString(36).slice(2,8).toUpperCase();PT.redeemed.unshift({n:r.n,code});PT.log.unshift({t:nowS(),n:-r.c,why:'استبدال: '+r.n});savePT();renderPoints();toast('تم الاستبدال (تجريبي)')}break}
+    case 'consentok':PR.consent=true;savePR();$('#modal').innerHTML='';startReal();break;
+    case 'consentno':$('#modal').innerHTML='';break;
+    case 'namesave':{const v=(($('#nameFirst')||{}).value||'').trim().slice(0,24);if(v){NET.name=v;store.set('mq.name',v);$('#modal').innerHTML='';renderConn();ping()}else toast('اكتبي اسم');break}
+    case 'withdraw':armed(b,'',withdraw);break;
+  }
+});
+document.addEventListener('input',e=>{
+  const t=e.target;
+  if(t.id==='accRange'){PR.acc=+t.value;$('#accVal').textContent=PR.acc+' م';savePR()}
+  else if(t.id==='rotRange'){LOT.rot=+t.value;$('#rotVal').textContent=LOT.rot+'°'}
+  else if(t.dataset&&t.dataset.cfg){DRAFT[t.dataset.cfg]=+t.value;$('#v_'+t.dataset.cfg).textContent=t.value+(t.dataset.unit||'')}
+});
+document.addEventListener('change',e=>{
+  const t=e.target;
+  if(t.id==='crowdChk'){PR.crowd=t.checked;savePR();if(PR.crowd&&!simR.size)crowdSeed();if(!PR.crowd)simR.clear();recompute()}
+  else if(t.id==='shareChk'){PR.share=t.checked;savePR()}
+  else if(t.id==='fpChk'){PR.useFp=t.checked;savePR();computeZone();updateFp();renderCalib();renderResults()}
+  else if(t.id==='testChk'){PR.testMode=t.checked;savePR()}
+  else if(t.id==='rotRange'){store.set('mq.lot',LOT);pushLot()}
+  else if(t.id==='nameIn'){NET.name=t.value.trim().slice(0,24);store.set('mq.name',NET.name);ping()}
+});
+$('#map').addEventListener('click',e=>{
+  const m=$('#map');if(!m.getScreenCTM)return;
+  const pt=m.createSVGPoint();pt.x=e.clientX;pt.y=e.clientY;
+  const q=pt.matrixTransform(m.getScreenCTM().inverse()),u=q.x,v=-q.y;
+  const sp=SPOTS.find(s=>Math.abs(u-s.u)<=CFG.spotL/2&&Math.abs(v-s.v)<=CFG.spotW/2);
+  if(sp){S.sel=sp.id;updateSelection();renderSpotCard();renderCalib();return}
+  if(S.mode==='sim'){
+    if(!inZone({u,v})||v<G.tz.v0)simGo(EXIT);
+    else simGo({u:0,v:clamp(v,G.tz.v0+1,G.tz.v1-1)});
+  }
+});
+
+/* ============ boot ============ */
+buildLot();
+SIM.car.u=EXIT.u;SIM.car.v=EXIT.v;
+drawMap();
+computeSpots();
+if(S.mode==='sim'){S.sensing=true;if(PR.crowd)crowdSeed()}
+computeSpots();updateSpots();
+renderAll();
+setInterval(()=>{S.hist.push(SPOTS.filter(s=>SPOT_STATE[s.id]&&SPOT_STATE[s.id].known&&SPOT_STATE[s.id].pFree<0.4).length);if(S.hist.length>60)S.hist.shift();computeSpots();updateSpots();renderCrowd();renderSpotCard()},5000);
+setTimeout(crowdTick,6000);
+if(!NET.name)openName();
+syncState().then(()=>startStream());
+setInterval(syncState,8000);
+setInterval(ping,4000);
+requestAnimationFrame(frame);
+window.__mq={S,SIM,P,PR,NET,CFG,LOT,FP,FPS,SPOT_STATE,SPOTS,EXIT,remote,simAdvance,startScenario,startAutoCal,process,simGo,allReports,toGeo,toLot,syncState,startCap,pushLot,buildLot,ping,UID:()=>UID,setMode,DRAFT,TESTS:()=>TESTS,addTest,posterior};
+})();
+</script>
+</body>
+</html>
